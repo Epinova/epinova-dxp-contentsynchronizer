@@ -1,0 +1,19 @@
+{
+  "name": "epinova-dxp-contentsynchronizer-tasks",
+  "version": "2.3.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Epinova/epinova-dxp-contentsynchronizer.git"
+  },
+  "keywords": [],
+  "author": "Ove Lartelius",
+  "license": "MIT",
+  "dependencies": {
+    "vss-web-extension-sdk": "^5.141.0"
+  }
+}
