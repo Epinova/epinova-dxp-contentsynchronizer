@@ -1,10 +1,10 @@
 {
-    "id": "2c912ca7-b6b3-47d8-8c99-0a91e7b059a2",
+    "id": "f7579ecf-9ef3-4af0-8587-f16b44046241",
     "name": "DxpExportDb",
     "friendlyName": "Export DB (Optimizely DXP)",
-    "description": "Export specified database as a bacpac file. (Optimizely DXP, former Episerver DXC)",
-    "helpUrl": "https://github.com/Epinova/epinova-dxp-deployment/blob/master/documentation/ExportDb.md",
-    "helpMarkDown": "[Extension page](https://marketplace.visualstudio.com/items?itemName=epinova-sweden.epinova-dxp-deploy-extension)[Learn more about this task](https://github.com/Epinova/epinova-dxp-deployment/blob/master/documentation/ExportDb.md)",
+    "description": "Export specified database as a bacpac file. (Optimizely DXP)",
+    "helpUrl": "https://github.com/Epinova/epinova-dxp-contentsynchronizer/blob/main/documentation/ExportDb.md",
+    "helpMarkDown": "[Extension page](https://marketplace.visualstudio.com/items?itemName=epinova-sweden.epinova-dxp-contentsynchronizer-extension)[Learn more about this task](https://github.com/Epinova/epinova-dxp-contentsynchronizer/blob/main/documentation/ExportDb.md)",
     "category": "Deploy",
     "visibility": [
         "Release"
@@ -12,8 +12,8 @@
     "author": "Ove Lartelius",
     "version": {
         "Major": 2,
-        "Minor": 7,
-        "Patch": 2
+        "Minor": 0,
+        "Patch": 0
     },
     "groups": [
         {

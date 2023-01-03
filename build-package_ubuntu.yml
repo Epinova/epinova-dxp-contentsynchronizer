@@ -14,9 +14,9 @@ pool:
 variables:
   buildnumber: $(Build.BuildNumber)
   PublisherID: 'epinova-sweden'
-  ExtensionID: 'epinova-dxp-contentsync-extension'
+  ExtensionID: 'epinova-dxp-contentsynchronizer-extension'
   ExtensionName: 'Epinova DXP content synchronizer'
-  ExtensionFileName: 'epinova-dxp-contentsync-extension-'
+  ExtensionFileName: 'epinova-dxp-contentsynchronizer-extension-'
   ExtensionVisibility: 'public'
 
 steps:

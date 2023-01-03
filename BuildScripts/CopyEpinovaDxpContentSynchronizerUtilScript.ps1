@@ -1,7 +1,7 @@
 ﻿
 Write-Host "---Start---"
 
-$script = (Get-Item -Path .\Modules\EpinovaDxpDeploymentUtil.ps1).FullName
+$script = (Get-Item -Path .\Modules\EpinovaDxpContentSynchronizerUtil.ps1).FullName
 
 Write-Host $script
 

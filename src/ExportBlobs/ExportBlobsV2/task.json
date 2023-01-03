@@ -1,10 +1,10 @@
 {
-    "id": "a2889c53-08ab-46f7-8748-a225eeed704c",
+    "id": "c1d6b7c1-cd4b-4ddf-908b-017b4e3bc038",
     "name": "DxpExportBlobs",
     "friendlyName": "Export Blobs (Optimizely DXP)",
-    "description": "Export blobs from specified container. (Optimizely DXP, former Episerver DXC)",
-    "helpUrl": "https://github.com/Epinova/epinova-dxp-deployment/blob/master/documentation/ExportBlobs.md",
-    "helpMarkDown": "[Extension page](https://marketplace.visualstudio.com/items?itemName=epinova-sweden.epinova-dxp-deploy-extension)[Learn more about this task](https://github.com/Epinova/epinova-dxp-deployment/blob/master/documentation/ExportBlobs.md)",
+    "description": "Export blobs from specified container. (Optimizely DXP)",
+    "helpUrl": "https://github.com/Epinova/epinova-dxp-contentsynchronizer/blob/main/documentation/ExportBlobs.md",
+    "helpMarkDown": "[Extension page](https://marketplace.visualstudio.com/items?itemName=epinova-sweden.epinova-dxp-contentsynchronizer-extension)[Learn more about this task](https://github.com/Epinova/epinova-dxp-contentsynchronizer/blob/main/documentation/ExportBlobs.md)",
     "category": "Deploy",
     "visibility": [
         "Release"
@@ -13,7 +13,7 @@
     "version": {
         "Major": 2,
         "Minor": 0,
-        "Patch": 1
+        "Patch": 0
     },
     "groups": [
         {
