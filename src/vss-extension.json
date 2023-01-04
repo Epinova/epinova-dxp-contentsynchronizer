@@ -2,8 +2,8 @@
     "manifestVersion": 1,
     "id": "epinova-dxp-contentsynchronizer-extension",
     "publisher": "epinova-sweden",
-    "version": "0.0.11",
-    "name": "Epinova DXP content synchronizer",
+    "version": "0.0.13",
+    "name": "Epinova DXP Content Synchronizer",
     "description": "Tasks to synchronize content (database/blobs) from Optimizely (formerly known as Episerver) DXP to Azure environment/resource.",
     "public": false,
     "icons":{
@@ -75,6 +75,16 @@
     },
     "contributions": [
         {
+            "id": "dxp-exportblobs-buildtask",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "ExportBlobs"
+            }
+        },
+        {
             "id": "dxp-exportdb-buildtask",
             "type": "ms.vss-distributed-task.task",
             "targets": [
@@ -85,13 +95,13 @@
             }
         },
         {
-            "id": "dxp-exportblobs-buildtask",
+            "id": "dxp-importdxpblobstoazure-buildtask",
             "type": "ms.vss-distributed-task.task",
             "targets": [
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "ExportBlobs"
+                "name": "ImportDxpBlobsToAzure"
             }
         },
         {
@@ -105,28 +115,31 @@
             }
         },
         {
-            "id": "dxp-importdxpblobstoazure-buildtask",
+            "id": "dxp-listcontainers-buildtask",
             "type": "ms.vss-distributed-task.task",
             "targets": [
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "ImportDxpBlobsToAzure"
+                "name": "ListContainers"
             }
         }
     ],
     "files": [
         {
+            "path": "ExportBlobs/ExportBlobsV2"
+        },
+        {
             "path": "ExportDb/ExportDbV2"
         },
         {
-            "path": "ExportBlobs/ExportBlobsV2"
+            "path": "ImportDxpBlobsToAzure/ImportDxpBlobsToAzureV2"
         },
         {
             "path": "ImportDxpDbToAzure/ImportDxpDbToAzureV2"
         },
         {
-            "path": "ImportDxpBlobsToAzure/ImportDxpBlobsToAzureV2"
+            "path": "ListContainers/ListContainersV2"
         },
         {
             "path": "node_modules/vss-web-extension-sdk/lib",

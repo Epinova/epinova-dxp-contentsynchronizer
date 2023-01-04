@@ -263,6 +263,80 @@ function Connect-EDCSDxpEpiCloud{
     Connect-EpiCloud -ClientKey $ClientKey -ClientSecret $ClientSecret -ProjectId $ProjectId
 }
 
+function Get-EDCSDxpStorageContainers{
+    <#
+    .SYNOPSIS
+        List storage containers in a DXP environment.
+
+    .DESCRIPTION
+        List storage containers in a DXP environment.
+
+    .PARAMETER ClientKey
+        The client key used to access the project.
+
+    .PARAMETER ClientSecret
+        The client secret used to access the project.
+
+    .PARAMETER ProjectId
+        The id of the DXP project.
+
+    .PARAMETER Environment
+        The environment where we should check for storage containers.
+
+    .PARAMETER Container
+        The name of the container that you want. If it does not exist it will try ti figure out which container you want.
+
+    .EXAMPLE
+        Get-EDCSDxpStorageContainers -ClientKey $ClientKey -ClientSecret $ClientSecret -ProjectId $ProjectId -Environment $Environment
+
+    .EXAMPLE
+        Get-EDCSDxpStorageContainers -ClientKey '644b6926-39b1-42a1-93d6-3771cdc4a04e' -ClientSecret '644b6926-39b1fasrehyjtye-42a1-93d6-3771cdc4asasda04e'-ProjectId '644b6926-39b1-42a1-93d6-3771cdc4a04e' -Environment 'Integration' 
+
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string] $ClientKey,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string] $ClientSecret,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string] $ProjectId,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [ValidateSet('Integration','Preproduction','Production','ADE1','ADE2','ADE3')]
+        [string] $Environment
+    )
+
+    Write-Host "Get-EDCSDxpStorageContainers - Inputs:--------------"
+    Write-Host "ClientKey:              $ClientKey"
+    Write-Host "ClientSecret:           **** (it is a secret...)"
+    Write-Host "ProjectId:              $ProjectId"
+    Write-Host "Environment:            $Environment"
+    Write-Host "------------------------------------------------"
+
+    try {
+        $containers = Get-EpiStorageContainer -ClientKey $ClientKey -ClientSecret $ClientSecret -ProjectId $ProjectId -Environment $Environment
+    }
+    catch {
+        Write-Error "Could not get storage container information from Epi. Make sure you have specified correct ProjectId/Environment"
+        Write-Error $_.Exception.ToString()
+        exit
+    }
+
+    if ($null -eq $containers){
+        Write-Error "Could not get Epi DXP storage containers. Make sure you have specified correct ProjectId/Environment"
+        exit
+    }
+
+    return $containers
+}
+
 function Get-EDCSDxpStorageContainerSasLink{
     <#
     .SYNOPSIS

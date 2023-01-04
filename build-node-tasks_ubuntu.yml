@@ -2,12 +2,17 @@ steps:
 - template: build-node-task_ubuntu.yml
   parameters:
     extensionRoot: '$(System.DefaultWorkingDirectory)/src'
+    taskName: 'ExportBlobs/ExportBlobsV2'
+
+- template: build-node-task_ubuntu.yml
+  parameters:
+    extensionRoot: '$(System.DefaultWorkingDirectory)/src'
     taskName: 'ExportDb/ExportDbV2'
 
 - template: build-node-task_ubuntu.yml
   parameters:
     extensionRoot: '$(System.DefaultWorkingDirectory)/src'
-    taskName: 'ExportBlobs/ExportBlobsV2'
+    taskName: 'ImportDxpBlobsToAzure/ImportDxpBlobsToAzureV2'
 
 - template: build-node-task_ubuntu.yml
   parameters:
@@ -17,4 +22,4 @@ steps:
 - template: build-node-task_ubuntu.yml
   parameters:
     extensionRoot: '$(System.DefaultWorkingDirectory)/src'
-    taskName: 'ImportDxpBlobsToAzure/ImportDxpBlobsToAzureV2'
+    taskName: 'ListContainers/ListContainersV2'
