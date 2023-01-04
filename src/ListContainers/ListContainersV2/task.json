@@ -1,10 +1,10 @@
 {
-    "id": "",
+    "id": "c1781202-4934-43c2-8b90-59e4e0afef83",
     "name": "DxpListContainers",
     "friendlyName": "List containers (Optimizely DXP)",
     "description": "List the containers in the specified environment. (Optimizely DXP, former Episerver DXC)",
-    "helpUrl": "https://github.com/Epinova/epinova-dxp-deployment/blob/master/documentation/ListContainers.md",
-    "helpMarkDown": "[Extension page](https://marketplace.visualstudio.com/items?itemName=epinova-sweden.epinova-dxp-deploy-extension)[Learn more about this task](https://github.com/Epinova/epinova-dxp-deployment/blob/master/documentation/ListContainers.md)",
+    "helpUrl": "https://github.com/Epinova/epinova-dxp-contentsynchronizer/blob/main/documentation/ListContainers.md",
+    "helpMarkDown": "[Extension page](https://marketplace.visualstudio.com/items?itemName=epinova-sweden.epinova-dxp-contentsynchronizer-extension)[Learn more about this task](https://github.com/Epinova/epinova-dxp-contentsynchronizer/blob/main/documentation/ListContainers.md)",
     "category": "Deploy",
     "visibility": [
         "Release"
@@ -13,7 +13,7 @@
     "version": {
         "Major": 2,
         "Minor": 0,
-        "Patch": 0
+        "Patch": 1
     },
     "groups": [
         {
@@ -32,7 +32,7 @@
             "isExpanded": false
         }
     ],
-    "releaseNotes": "v2.0.0: Created",
+    "releaseNotes": "v2.0.1: Created",
     "minimumAgentVersion": "2.134.0",
     "inputs": [
         {
