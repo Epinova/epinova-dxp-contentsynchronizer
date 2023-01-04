@@ -1,10 +1,5 @@
 [CmdletBinding()]
 Param(
-    # $ClientKey,
-    # $ClientSecret,
-    # $ProjectId, 
-    # $Environment,
-    # $DxpContainer,
     $DxpExportBlobsSasLink,
     $SubscriptionId,
     $ResourceGroupName,
@@ -18,12 +13,6 @@ Param(
 
 try {
     # Get all inputs for the task
-    # $clientKey = $ClientKey
-    # $clientSecret = $ClientSecret
-    # $projectId = $ProjectId
-    # $environment = $Environment
-
-    # $dxpContainer = $DxpContainer
     $dxpExportBlobsSasLink = $DxpExportBlobsSasLink
     $subscriptionId = $SubscriptionId
     $resourceGroupName = $ResourceGroupName
@@ -44,15 +33,7 @@ try {
 
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-    #$SourceSasLink = $(DxpBlobsSasLink)
-    #$SourceSasLink = Get-Content DxpBlobsSasLink.txt
-
     Write-Host "Inputs - ImportDxpBlobsToAzure:"
-    # Write-Host "ClientKey:                  $clientKey"
-    # Write-Host "ClientSecret:               **** (it is a secret...)"
-    # Write-Host "ProjectId:                  $projectId"
-    # Write-Host "Environment:                $environment"
-    # Write-Host "DxpContainer:               $dxpContainer"
     Write-Host "DxpExportBlobsSasLink:      $dxpExportBlobsSasLink"
     Write-Host "SourceSasLink:              $SourceSasLink"
     Write-Host "SubscriptionId:             $subscriptionId"
@@ -63,36 +44,9 @@ try {
     Write-Host "Timeout:                    $timeout"
     Write-Host "RunVerbose:                 $runVerbose"
 
-    . "$PSScriptRoot\ps_modules\EpinovaDxpDeploymentUtil.ps1"
+    . "$PSScriptRoot\ps_modules\EpinovaDxpContentSynchronizerUtil.ps1"
 
-    #Mount-PsModulesPath
-
-    # Initialize-EpiCload
-
-    # Write-DxpHostVersion
-    #$sasInfo = Get-SasInfo -SasLink $dxpExportBlobsSasLink
-
-    # Test-DxpProjectId -ProjectId $projectId
-
-    #Set-ExecutionPolicy -Scope CurrentUser Unrestricted
-    #Install-Module -Name "EpinovaDxpToolBucket" -MinimumVersion 0.5.0 -Verbose
-    # Install-Module EpinovaAzureToolBucket -Scope CurrentUser -Force
-    # Get-InstalledModule -Name EpinovaAzureToolBucket
-
-    #Install-AzStorage
-
-    #Import-Module Az.Storage
-    #Get-InstalledModule -Name Az
-    #Import-Module Az.Storage
-    #Install-Module -Name Az -AllowClobber -Scope CurrentUser
-    #Install-Module Az.Storage
-    #Get-InstalledModule -Name Az.Storage
-
-
-    #Sync-DxpBlobsToAzure -ClientKey $clientKey -ClientSecret $clientSecret -ProjectId $projectId -Environment $environment -DxpContainer $dxpContainer -Timeout $timeout -SubscriptionId $subscriptionId -ResourceGroupName $resourceGroupName -StorageAccountName $storageAccountName -StorageAccountContainer $storageAccountContainer -CleanBeforeCopy $cleanBeforeCopy
-    # Copy-BlobsWithSas -SourceSasLink $dxpExportBlobsSasLink -DestinationSubscriptionId $SubscriptionId -DestinationResourceGroupName $ResourceGroupName -DestinationStorageAccountName $StorageAccountName -DestinationContainerName $StorageAccountContainer -CleanBeforeCopy $CleanBeforeCopy
-
-    $sasInfo = Get-SasInfo -SasLink $dxpExportBlobsSasLink
+    $sasInfo = Get-EDCSSasInfo -SasLink $dxpExportBlobsSasLink
 
     $sourceContext = New-AzStorageContext -StorageAccountName $sourceStorageAccountName -SASToken $sasInfo.SasToken -ErrorAction Stop
     if ($null -eq $sourceContext) {
@@ -118,7 +72,6 @@ try {
     ####################################################################################
 
     Write-Host "---THE END---"
-
 }
 catch {
     Write-Verbose "Exception caught from task: $($_.Exception.ToString())"

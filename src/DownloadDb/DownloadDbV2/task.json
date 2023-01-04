@@ -1,0 +1,86 @@
+{
+    "id": "61a9a50f-005a-4778-9484-840194ab6d61",
+    "name": "DxpDownloadDb",
+    "friendlyName": "Download DB (Optimizely DXP)",
+    "description": "Download specified database as a bacpac file. (Optimizely DXP)",
+    "helpUrl": "https://github.com/Epinova/epinova-dxp-contentsynchronizer/blob/main/documentation/DownloadDb.md",
+    "helpMarkDown": "[Extension page](https://marketplace.visualstudio.com/items?itemName=epinova-sweden.epinova-dxp-contentsynchronizer-extension)[Learn more about this task](https://github.com/Epinova/epinova-dxp-contentsynchronizer/blob/main/documentation/DownloadDb.md)",
+    "category": "Deploy",
+    "visibility": [
+        "Release"
+    ],
+    "author": "Ove Lartelius",
+    "version": {
+        "Major": 2,
+        "Minor": 0,
+        "Patch": 0
+    },
+    "groups": [
+        {
+            "name": "Settings",
+            "displayName": "Script settings",
+            "isExpanded": true
+        },
+        {
+            "name": "Timeout",
+            "displayName": "Timeout",
+            "isExpanded": false
+        },
+        {
+            "name": "ErrorHandlingOptions",
+            "displayName": "Error handling options",
+            "isExpanded": false
+        }
+    ],
+    "releaseNotes": "v2.0.0: Created task",
+    "minimumAgentVersion": "2.134.0",
+    "inputs": [
+        {
+            "name": "DbExportDownloadLink",
+            "type": "string",
+            "label": "SAS link / Db export download link",
+            "required": true,
+            "defaultValue": "$(DbExportDownloadLink)",
+            "helpMarkDown": "The SAS link to the bacpac file that you want to restore in Azure. Example: $(DbExportDownloadLink). This value will be set automatically if you use task ExportDb.",
+            "groupName": "Settings"
+        },
+        {
+            "name": "Timeout",
+            "type": "int",
+            "label": "Script timeout (in seconds)",
+            "required": true,
+            "defaultValue": "1800",
+            "helpMarkDown": "The timeout for the script.",
+            "groupName": "Timeout"
+        },
+        {
+            "name": "RunVerbose",
+            "type": "boolean",
+            "label": "Run Verbose",
+            "required": true,
+            "defaultValue": "false",
+            "helpMarkDown": "If tou want to run in verbose mode and see all information.",
+            "groupName": "ErrorHandlingOptions"
+        },
+        {
+            "name": "ErrorActionPreference",
+            "type": "pickList",
+            "label": "ErrorActionPreference",
+            "required": false,
+            "defaultValue": "stop",
+            "options": {
+                "stop": "Stop",
+                "continue": "Continue",
+                "silentlyContinue": "SilentlyContinue"
+            },
+            "helpMarkDown": "Prepends the line `$ErrorActionPreference = 'VALUE'` at the top of your script.",
+            "groupName": "ErrorHandlingOptions"
+        }
+    ],
+    "instanceNameFormat": "Download DB $(Environment)",
+    "execution": {
+        "Node10": {
+            "target": "DownloadDb.js"
+        }
+    }
+}

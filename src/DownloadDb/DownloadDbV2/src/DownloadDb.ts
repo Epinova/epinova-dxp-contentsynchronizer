@@ -9,12 +9,7 @@ import {
 export async function run() {
     try {
         // Get the build and release details
-        let ClientKey = tl.getInput("ClientKey");
-        let ClientSecret = tl.getInput("ClientSecret");
-        let ProjectId = tl.getInput("ProjectId");
-        let Environment = tl.getInput("Environment");
-        let DxpContainer = tl.getInput("DxpContainer");
-        let RetentionHours = tl.getInput("RetentionHours");
+        let DbExportDownloadLink = tl.getInput("DbExportDownloadLink");
         let Timeout = tl.getInput("Timeout");
         let RunVerbose = tl.getBoolInput("RunVerbose", false);
 
@@ -33,13 +28,8 @@ export async function run() {
         }
 
         // we need to not pass the null param
-        var args = [__dirname + "\\ExportBlobs.ps1",
-        "-ClientKey", ClientKey,
-        "-ClientSecret", ClientSecret,
-        "-ProjectId", ProjectId,
-        "-Environment", Environment,
-        "-DxpContainer", DxpContainer,
-        "-RetentionHours", RetentionHours,
+        var args = [__dirname + "\\DownloadDb.ps1",
+        "-DbExportDownloadLink", DbExportDownloadLink,
         "-Timeout", Timeout
         ];
         if (RunVerbose) {
@@ -47,13 +37,8 @@ export async function run() {
             args.push("true");
         }
 
-        var argsShow = [__dirname + "\\ExportBlobs.ps1",
-        "-ClientKey", ClientKey,
-        "-ClientSecret", "***",
-        "-ProjectId", ProjectId,
-        "-Environment", Environment,
-        "-DxpContainer", DxpContainer,
-        "-RetentionHours", RetentionHours,
+        var argsShow = [__dirname + "\\DownloadDb.ps1",
+        "-DbExportDownloadLink", DbExportDownloadLink,
         "-Timeout", Timeout
         ];
         if (RunVerbose) {

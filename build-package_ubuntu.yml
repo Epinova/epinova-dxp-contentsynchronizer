@@ -2,7 +2,7 @@ trigger:
   batch: true
   branches:
     include:
-    - master
+    - main
 
 name: $(Date:yyyyMMdd)$(Rev:.r)
 
@@ -17,7 +17,7 @@ variables:
   ExtensionID: 'epinova-dxp-contentsynchronizer-extension'
   ExtensionName: 'Epinova DXP content synchronizer'
   ExtensionFileName: 'epinova-dxp-contentsynchronizer-extension-'
-  ExtensionVisibility: 'public'
+  ExtensionVisibility: 'private'
 
 steps:
   # for each Node based task we must transpile it

@@ -61,9 +61,9 @@ try {
     Install-Module EpinovaAzureToolBucket -Scope CurrentUser -Force
     Get-InstalledModule -Name EpinovaAzureToolBucket
 
-    . "$PSScriptRoot\ps_modules\EpinovaDxpDeploymentUtil.ps1"
+    . "$PSScriptRoot\ps_modules\EpinovaDxpContentSynchronizerUtil.ps1"
 
-    $sasInfo = Get-SasInfo -SasLink $dbExportDownloadLink
+    $sasInfo = Get-EDCSSasInfo -SasLink $dbExportDownloadLink
 
     $databaseExist = $false
     try {
@@ -139,29 +139,6 @@ try {
         Set-AzSqlDatabase -ResourceGroupName $resourceGroupName -DatabaseName $sqlDatabaseName -ServerName $sqlServerName -RequestedServiceObjectiveName $sqlSku #-Edition "Standard"
 
     }
-
-    # Write-Host "------------------------------------------------"
-    # Write-Host "Start upload bacpac to Azure."
-    # Write-Host "`$BacpacFilename = Send-Blob -SubscriptionId $subscriptionId -ResourceGroupName $resourceGroupName -StorageAccountName $storageAccountName -StorageAccountContainer $storageAccountContainer -FilePath $bacpacFilePath -BlobName $BlobName"
-    # $BacpacFilename = Send-Blob -SubscriptionId $subscriptionId -ResourceGroupName $resourceGroupName -StorageAccountName $storageAccountName -StorageAccountContainer $storageAccountContainer -FilePath $bacpacFilePath -BlobName $BlobName #-Debug
-    # ###########################################################################################################
-
-    # Copy-BlobsWithSas -SourceSasLink $dbExportDownloadLink -DestinationSubscriptionId $SubscriptionId -DestinationResourceGroupName $ResourceGroupName -DestinationStorageAccountName $StorageAccountName -DestinationContainerName $StorageAccountContainer -CleanBeforeCopy $false
-
-    # . "$PSScriptRoot\ps_modules\EpinovaDxpDeploymentUtil.ps1"
-    # $sasInfo = Get-SasInfo -SasLink $dbExportDownloadLink
-
-    # $BacpacFilename = $sasInfo.Blob
-
-    # Write-Host "BacpacFilename: $BacpacFilename"
-   
-    # if ($null -eq $BacpacFilename -or $BacpacFilename.Length -eq 0){
-    #     Write-Host "We do not have any database uploaded. Will exit."
-    #     exit
-    # }
-
-    # Write-Host "Import-BacpacDatabase -SubscriptionId $subscriptionId -ResourceGroupName $resourceGroupName -StorageAccountName $storageAccountName -StorageAccountContainer $storageAccountContainer -BacpacFilename $BacpacFilename -SqlServerName $sqlServerName -SqlDatabaseName $sqlDatabaseName -SqlDatabaseLogin $sqlDatabaseLogin -SqlDatabasePassword $sqlDatabasePassword -RunDatabaseBackup $runDatabaseBackup -SqlSku $sqlSku"
-    # Import-BacpacDatabase -SubscriptionId $subscriptionId -ResourceGroupName $resourceGroupName -StorageAccountName $storageAccountName -StorageAccountContainer $storageAccountContainer -BacpacFilename $BacpacFilename -SqlServerName $sqlServerName -SqlDatabaseName $sqlDatabaseName -SqlDatabaseLogin $sqlDatabaseLogin -SqlDatabasePassword $sqlDatabasePassword -RunDatabaseBackup $runDatabaseBackup -SqlSku $sqlSku
     
     ####################################################################################
 

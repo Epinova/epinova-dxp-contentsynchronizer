@@ -2,10 +2,10 @@
     "manifestVersion": 1,
     "id": "epinova-dxp-contentsynchronizer-extension",
     "publisher": "epinova-sweden",
-    "version": "0.0.10",
+    "version": "0.0.11",
     "name": "Epinova DXP content synchronizer",
     "description": "Tasks to synchronize content (database/blobs) from Optimizely (formerly known as Episerver) DXP to Azure environment/resource.",
-    "public": true,
+    "public": false,
     "icons":{
         "default": "img/Epinova_e_128x128.png"
     },
@@ -25,6 +25,10 @@
         "Deploy",
         "DXC",
         "DXP",
+        "Azure portal",
+        "Azure resource group",
+        "Azure SQL Server",
+        "Azure SQL database",
         "Publish",
         "Install",
         "Continuous Integration",
@@ -36,7 +40,11 @@
         "Optimizely Content Cloud",
         "Episerver Commerce Cloud",
         "Optimizely Commerce Cloud",
-        "EpiCloud"
+        "EpiCloud",
+        "Content synchronization",
+        "Database synchronization",
+        "Database import",
+        "Blob synchronization"
     ],
     "branding":{
         "color": "rgb(255,255,255)",

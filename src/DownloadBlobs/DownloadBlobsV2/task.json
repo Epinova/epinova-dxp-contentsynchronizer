@@ -1,0 +1,95 @@
+{
+    "id": "7e3aebe1-de8f-46f9-9e2a-3eab86d8dcda",
+    "name": "DxpDownloadBlobs",
+    "friendlyName": "Download Blobs (Optimizely DXP)",
+    "description": "Download blobs from specified container. (Optimizely DXP)",
+    "helpUrl": "https://github.com/Epinova/epinova-dxp-contentsynchronizer/blob/main/documentation/DownloadBlobs.md",
+    "helpMarkDown": "[Extension page](https://marketplace.visualstudio.com/items?itemName=epinova-sweden.epinova-dxp-contentsynchronizer-extension)[Learn more about this task](https://github.com/Epinova/epinova-dxp-contentsynchronizer/blob/main/documentation/DownloadBlobs.md)",
+    "category": "Deploy",
+    "visibility": [
+        "Release"
+    ],
+    "author": "Ove Lartelius",
+    "version": {
+        "Major": 2,
+        "Minor": 0,
+        "Patch": 0
+    },
+    "groups": [
+        {
+            "name": "Settings",
+            "displayName": "Script settings",
+            "isExpanded": true
+        },
+        {
+            "name": "Timeout",
+            "displayName": "Timeout",
+            "isExpanded": false
+        },
+        {
+            "name": "ErrorHandlingOptions",
+            "displayName": "Error handling options",
+            "isExpanded": false
+        }
+    ],
+    "releaseNotes": "v2.0.0: Created task",
+    "minimumAgentVersion": "2.134.0",
+    "inputs": [
+        {
+            "name": "DxpExportBlobsSasLink",
+            "type": "string",
+            "label": "SAS link / Blobs export SAS link",
+            "required": true,
+            "defaultValue": "$(DxpExportBlobsSasLink)",
+            "helpMarkDown": "The SAS link to the blobs that you want to sync to Azure. Example: $(DxpExportBlobsSasLink). This value will be set automatically if you use task ExportBlobs.",
+            "groupName": "Settings"
+        },
+        {
+            "name": "DownloadFolder",
+            "type": "string",
+            "label": "Download folder",
+            "required": false,
+            "defaultValue": "$(System.DefaultWorkingDirectory)",
+            "helpMarkDown": "",
+            "groupName": "Settings"
+        },
+        {
+            "name": "Timeout",
+            "type": "int",
+            "label": "Script timeout (in seconds)",
+            "required": true,
+            "defaultValue": "1800",
+            "helpMarkDown": "The timeout for the script.",
+            "groupName": "Timeout"
+        },
+        {
+            "name": "RunVerbose",
+            "type": "boolean",
+            "label": "Run Verbose",
+            "required": true,
+            "defaultValue": "false",
+            "helpMarkDown": "If tou want to run in verbose mode and see all information.",
+            "groupName": "ErrorHandlingOptions"
+        },
+        {
+            "name": "ErrorActionPreference",
+            "type": "pickList",
+            "label": "ErrorActionPreference",
+            "required": false,
+            "defaultValue": "stop",
+            "options": {
+                "stop": "Stop",
+                "continue": "Continue",
+                "silentlyContinue": "SilentlyContinue"
+            },
+            "helpMarkDown": "Prepends the line `$ErrorActionPreference = 'VALUE'` at the top of your script.",
+            "groupName": "ErrorHandlingOptions"
+        }
+    ],
+    "instanceNameFormat": "Download Blobs",
+    "execution": {
+        "Node10": {
+            "target": "DownloadBlobs.js"
+        }
+    }
+}

@@ -9,14 +9,11 @@ import {
 export async function run() {
     try {
         // Get the build and release details
-        let ClientKey = tl.getInput("ClientKey");
-        let ClientSecret = tl.getInput("ClientSecret");
-        let ProjectId = tl.getInput("ProjectId");
-        let Environment = tl.getInput("Environment");
-        let DxpContainer = tl.getInput("DxpContainer");
-        let RetentionHours = tl.getInput("RetentionHours");
+        let DxpExportBlobsSasLink = tl.getInput("DxpExportBlobsSasLink");
         let Timeout = tl.getInput("Timeout");
         let RunVerbose = tl.getBoolInput("RunVerbose", false);
+
+        let DownloadFolder = tl.getInput("DownloadFolder");
 
         // we need to get the verbose flag passed in as script flag
         var verbose = (tl.getVariable("System.Debug") === "true");
@@ -33,28 +30,20 @@ export async function run() {
         }
 
         // we need to not pass the null param
-        var args = [__dirname + "\\ExportBlobs.ps1",
-        "-ClientKey", ClientKey,
-        "-ClientSecret", ClientSecret,
-        "-ProjectId", ProjectId,
-        "-Environment", Environment,
-        "-DxpContainer", DxpContainer,
-        "-RetentionHours", RetentionHours,
-        "-Timeout", Timeout
+        var args = [__dirname + "\\DownloadBlobs.ps1",
+        "-DxpExportBlobsSasLink", DxpExportBlobsSasLink,
+        "-Timeout", Timeout,
+        "-DownloadFolder", DownloadFolder
         ];
         if (RunVerbose) {
             args.push("-RunVerbose");
             args.push("true");
         }
 
-        var argsShow = [__dirname + "\\ExportBlobs.ps1",
-        "-ClientKey", ClientKey,
-        "-ClientSecret", "***",
-        "-ProjectId", ProjectId,
-        "-Environment", Environment,
-        "-DxpContainer", DxpContainer,
-        "-RetentionHours", RetentionHours,
-        "-Timeout", Timeout
+        var argsShow = [__dirname + "\\DownloadBlobs.ps1",
+        "-DxpExportBlobsSasLink", DxpExportBlobsSasLink,
+        "-Timeout", Timeout,
+        "-DownloadFolder", DownloadFolder
         ];
         if (RunVerbose) {
             argsShow.push("-RunVerbose");

@@ -13,7 +13,7 @@
     "version": {
         "Major": 2,
         "Minor": 0,
-        "Patch": 0
+        "Patch": 1
     },
     "groups": [
         {
@@ -96,25 +96,6 @@
             "defaultValue": "24",
             "helpMarkDown": "By default, the bacpac file is retained for 24 hours unless otherwise the retention hour is overridden.",
             "groupName": "Settings"
-        },
-        {
-            "name": "DownloadBlobs",
-            "type": "boolean",
-            "label": "Download blobs",
-            "required": true,
-            "defaultValue": "false",
-            "helpMarkDown": "Download blobs when it has been exported. Used to export to external Azure Storage Account for example.",
-            "groupName": "Settings"
-        },
-        {
-            "name": "DownloadFolder",
-            "type": "string",
-            "label": "Download folder",
-            "required": false,
-            "defaultValue": "$(System.DefaultWorkingDirectory)",
-            "helpMarkDown": "",
-            "groupName": "Settings",
-            "visibleRule": "DownloadBlobs = true"
         },
         {
             "name": "Timeout",

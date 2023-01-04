@@ -7,9 +7,7 @@ Param(
     $DatabaseName,
     $RetentionHours,
     $Timeout,
-    $RunVerbose #,
-    # $DownloadBacpac,
-    # $DownloadFolder
+    $RunVerbose
 )
 try {
     # Get all inputs for the task
@@ -21,9 +19,6 @@ try {
     $retentionHours = $RetentionHours
     $timeout = $Timeout
     $runVerbose = [System.Convert]::ToBoolean($RunVerbose)
-
-    # $downloadBacpac = [System.Convert]::ToBoolean($DownloadBacpac)
-    # $downloadFolder = $DownloadFolder
 
     # 30 min timeout
     ####################################################################################
@@ -44,20 +39,18 @@ try {
     Write-Host "RetentionHours:     $retentionHours"
     Write-Host "Timeout:            $timeout"
     Write-Host "RunVerbose:         $runVerbose"
-    # Write-Host "DownloadBacpac:     $downloadBacpac"
-    # Write-Host "DownloadFolder:     $downloadFolder"
 
-    . "$PSScriptRoot\ps_modules\EpinovaDxpDeploymentUtil.ps1"
+    . "$PSScriptRoot\ps_modules\EpinovaDxpContentSynchronizerUtil.ps1"
 
-    Mount-PsModulesPath
+    Mount-EDCSPsModulesPath
 
-    Initialize-EpiCload
+    Initialize--EDCSEpiCload
 
-    Write-DxpHostVersion
+    Write--EDCSDxpHostVersion
 
-    Test-DxpProjectId -ProjectId $projectId
+    Test--EDCSDxpProjectId -ProjectId $projectId
 
-    Connect-DxpEpiCloud -ClientKey $clientKey -ClientSecret $clientSecret -ProjectId $projectId
+    Connect--EDCSDxpEpiCloud -ClientKey $clientKey -ClientSecret $clientSecret -ProjectId $projectId
 
     $exportDatabaseSplat = @{
         ProjectId          = $projectId
@@ -77,12 +70,12 @@ try {
     $exportId = $export.id
 
     if ($export.status -eq "InProgress") {
-        $deployDateTime = Get-DxpDateTimeStamp
+        $deployDateTime = Get-EDCSDxpDateTimeStamp
         Write-Host "Export $exportId started $deployDateTime."
 
-        $status = Invoke-DxpExportProgress -Projectid $projectId -ExportId $exportId -Environment $environment -DatabaseName $databaseName -ExpectedStatus "Succeeded" -Timeout $timeout
+        $status = Invoke-EDCSDxpExportProgress -Projectid $projectId -ExportId $exportId -Environment $environment -DatabaseName $databaseName -ExpectedStatus "Succeeded" -Timeout $timeout
 
-        $deployDateTime = Get-DxpDateTimeStamp
+        $deployDateTime = Get-EDCSDxpDateTimeStamp
         Write-Host "Export $exportId ended $deployDateTime"
 
         if ($status.status -eq "Succeeded") {
@@ -107,21 +100,6 @@ try {
     Write-Host "##vso[task.setvariable variable=DbExportDownloadLink;]$($status.downloadLink)"
     Write-Host "Setvariable DbExportBacpacName: $($status.bacpacName)"
     Write-Host "##vso[task.setvariable variable=DbExportBacpacName;]$($status.bacpacName)"
-
-    # if ($downloadBacpac){
-    #     Write-Host "-------------DOWNLOAD-TO-AGENT---------------------"
-    #     Write-Host "Start download database $($status.downloadLink)"
-    #     if ($downloadFolder.Contains("\")){
-    #         $filePath = "$downloadFolder\$($status.bacpacName)"
-    #     } else {
-    #         $filePath = "$downloadFolder/$($status.bacpacName)"
-    #     }
-    #     Invoke-WebRequest -Uri $status.downloadLink -OutFile $filePath
-    #     Write-Host "Downloaded database to $filePath"
-    #     Write-Host "Setvariable DbExportBacpacFilePath: $filePath"
-    #     Write-Host "##vso[task.setvariable variable=DbExportBacpacFilePath;]$filePath"
-    #     Write-Host "------------------------------------------------"
-    # }
 
     ####################################################################################
     Write-Host "---THE END---"

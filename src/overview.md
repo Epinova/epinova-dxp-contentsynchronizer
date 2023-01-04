@@ -9,9 +9,11 @@ Tasks
 
 ## Details
 
+### Export Blobs (Optimizely DXP) ###
+Export blobs from specified DXP environment.  
 
 ### Export DB (Optimizely DXP) ###
-Export database as a bacpac file from specified environment.  
+Export database as a bacpac file from specified DXP environment.  
 
 ### Import DXP DB to Azure (Optimizely DXP) ###
 Task that import a DXP bacpac to a Azure SQL Server.  

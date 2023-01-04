@@ -13,7 +13,7 @@
     "version": {
         "Major": 2,
         "Minor": 0,
-        "Patch": 0
+        "Patch": 1
     },
     "groups": [
         {
@@ -32,7 +32,7 @@
             "isExpanded": false
         }
     ],
-    "releaseNotes": "v2.6.0: Download bacpac \r\n v2.5.0: Return/Set variable DbExportBacpacName. \r\n v2.4.0: RunVerbose. \r\n v2.3.0 Additional Development Environment support",
+    "releaseNotes": "v2.0.0: Created task",
     "minimumAgentVersion": "2.134.0",
     "inputs": [
         {

@@ -15,8 +15,12 @@ In the end of that page, there also a link to how to manage extension permission
 
 ## Tasks ##
 
+### Export Blobs (Optimizely DXP) ###
+Export blobs from specified DXP environment.  
+[Export DB documentation](documentation/ExportDb.md)  
+
 ### Export DB (Optimizely DXP) ###
-Export database as a bacpac file from specified environment.  
+Export database as a bacpac file from specified DXP environment.  
 [Export DB documentation](documentation/ExportDb.md)  
 
 ### Import DXP DB to Azure (Optimizely DXP) ###
