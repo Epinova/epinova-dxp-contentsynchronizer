@@ -1,6 +1,6 @@
 # Release notes
 
-## v0.0.15
+## v0.0.16
 - Polish code
 
 ## v0.0.14
