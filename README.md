@@ -7,7 +7,7 @@ Bucket of tasks to helping you to synchronize database and/or blobs from Optimiz
 The release tasks use the [Deployment API](https://world.optimizely.com/documentation/developer-guides/digital-experience-platform/deploying/optimizely-digital-experience-cloud-deployment-api/). There are some developers out there that want/need help with deployment to the Optimizely (formerly known as Episerver) DXP enviroment. And that is why this deployment extension is created. 
   
 ## Install 
-[How to install Epinova DXP Deployment extension](documentation/InstallDxpExtension.md)  
+[How to install Epinova DXP Content Synchronizer extension](documentation/InstallDxpExtension.md)  
 **In short:**
 Install the extension to your Azure DevOps project: [https://marketplace.visualstudio.com/items?itemName=epinova-sweden.epinova-dxp-contentsynchronizer-extension](https://marketplace.visualstudio.com/items?itemName=epinova-sweden.epinova-dxp-contentsynchronizer-extension). Click on the green "Get it free" button and follow the instructions.  
 Microsoft has general information on how to install an Azure DevOps extension:  [https://docs.microsoft.com/en-us/azure/devops/marketplace/install-extension](https://docs.microsoft.com/en-us/azure/devops/marketplace/install-extension)  

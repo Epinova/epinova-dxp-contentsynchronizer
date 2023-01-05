@@ -42,33 +42,12 @@ steps:
     command: 'install'
     workingDir: '${{parameters.extensionRoot}}/${{parameters.taskName}}'
 
-# - task: SnykSecurityScan@0
-#   inputs:
-#     serviceConnectionEndpoint: 'Snyk (Apr2020)'
-#     testType: 'app'
-#     monitorOnBuild: true
-#     failOnIssues: true
-#     testDirectory: '${{parameters.extensionRoot}}\\${{parameters.taskName}}'
-
 - task: Npm@1
   displayName: '${{parameters.taskName}}: npm run build'
   inputs:
     command: 'custom'
     workingDir: '${{parameters.extensionRoot}}/${{parameters.taskName}}'
     customCommand: 'run build'
-
-# - task: Npm@1
-#   displayName: '${{parameters.taskName}}: npm run test'
-#   inputs:
-#     command: 'custom'
-#     workingDir: '${{parameters.extensionRoot}}\\${{parameters.taskName}}'
-#     customCommand: 'run test'
-
-# - task: PublishTestResults@2
-#   displayName: '${{parameters.taskName}}: Publish Test Results'
-#   inputs:
-#     cwd: '${{parameters.extensionRoot}}\\${{parameters.taskName}}'
-#     testRunTitle: '${{parameters.taskName}}'
 
 - task: Npm@1
   displayName: '${{parameters.taskName}}: npm run package'

@@ -30,7 +30,7 @@ try {
 
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
     
-    Write-Host "Inputs:"
+    Write-Host "Inputs - ExportDb:"
     Write-Host "ClientKey:          $clientKey"
     Write-Host "ClientSecret:       **** (it is a secret...)"
     Write-Host "ProjectId:          $projectId"
@@ -44,13 +44,13 @@ try {
 
     Mount-EDCSPsModulesPath
 
-    Initialize--EDCSEpiCload
+    Initialize-EDCSEpiCload
 
-    Write--EDCSDxpHostVersion
+    Write-EDCSDxpHostVersion
 
-    Test--EDCSDxpProjectId -ProjectId $projectId
+    Test-EDCSDxpProjectId -ProjectId $projectId
 
-    Connect--EDCSDxpEpiCloud -ClientKey $clientKey -ClientSecret $clientSecret -ProjectId $projectId
+    Connect-EDCSDxpEpiCloud -ClientKey $clientKey -ClientSecret $clientSecret -ProjectId $projectId
 
     $exportDatabaseSplat = @{
         ProjectId          = $projectId

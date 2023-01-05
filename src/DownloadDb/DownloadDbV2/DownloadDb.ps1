@@ -20,7 +20,7 @@ try {
 
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
     
-    Write-Host "Inputs:"
+    Write-Host "Inputs - DownloadDb:"
     Write-Host "DbExportDownloadLink:   $dbExportDownloadLink"
     Write-Host "Timeout:                $timeout"
     Write-Host "RunVerbose:             $runVerbose"

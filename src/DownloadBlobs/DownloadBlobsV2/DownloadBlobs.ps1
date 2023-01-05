@@ -23,7 +23,7 @@ try {
 
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
     
-    Write-Host "Inputs:"
+    Write-Host "Inputs - DownloadBlobs:"
     Write-Host "DxpExportBlobsSasLink:  $dxpExportBlobsSasLink"
     Write-Host "DownloadFolder:         $downloadFolder"
     Write-Host "Timeout:                $timeout"

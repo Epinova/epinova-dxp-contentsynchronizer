@@ -41,7 +41,7 @@ try {
         $PSDefaultParameterValues['*:Verbose'] = $true
     }
 
-    Write-Host "Inputs:"
+    Write-Host "Inputs - ImportDxpDbToAzure:"
     Write-Host "DbExportDownloadLink:       $dbExportDownloadLink"
     Write-Host "SubscriptionId:             $subscriptionId"
     Write-Host "ResourceGroupName:          $resourceGroupName"

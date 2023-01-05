@@ -1,5 +1,8 @@
 # Release notes
 
+## v0.0.15
+- Polish code
+
 ## v0.0.14
 - Added ListContainers
 

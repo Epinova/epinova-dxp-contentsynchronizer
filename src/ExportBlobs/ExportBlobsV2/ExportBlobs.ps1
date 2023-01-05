@@ -30,7 +30,7 @@ try {
 
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
     
-    Write-Host "Inputs:"
+    Write-Host "Inputs - ExportBlobs:"
     Write-Host "ClientKey:          $clientKey"
     Write-Host "ClientSecret:       **** (it is a secret...)"
     Write-Host "ProjectId:          $projectId"
