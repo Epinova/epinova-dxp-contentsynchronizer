@@ -5,7 +5,7 @@
         "build": "npm run clean && npm run transpile",
         "package": "npm prune -production && npm run copy",
         "copy": "ncp ./dist/src ./",
-        "clean": "rimraf ./dist/src && rimraf ./dist/test && rimraf ./*.js && rimraf ./*.js.map",
+        "clean": "rimraf ./dist/src && rimraf ./*.js && rimraf ./*.js.map",
         "transpile": "tsc --project ./"
     },
     "main": "test.js",
