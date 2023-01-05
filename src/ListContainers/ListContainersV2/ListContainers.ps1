@@ -26,7 +26,7 @@ try {
 
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-    Write-Host "Inputs:"
+    Write-Host "Inputs - ListContainers:"
     Write-Host "ClientKey:          $clientKey"
     Write-Host "ClientSecret:       **** (it is a secret...)"
     Write-Host "ProjectId:          $projectId"
@@ -49,10 +49,10 @@ try {
 
     Connect-EDCSDxpEpiCloud -ClientKey $clientKey -ClientSecret $clientSecret -ProjectId $projectId
 
-    $containers = Get-DxpStorageContainers -ClientKey $ClientKey -ClientSecret $ClientSecret -ProjectId $ProjectId -Environment $Environment
-    Write-Host "Containers:-------------------"
+    $containers = Get-EDCSDxpStorageContainers -ClientKey $ClientKey -ClientSecret $ClientSecret -ProjectId $ProjectId -Environment $Environment
+    Write-Host "Containers in environment: $Environment -------------------"
     $containers.storageContainers | Format-Table
-    Write-Host "------------------------------"
+    Write-Host "-----------------------------------------------------------"
     ####################################################################################
     Write-Host "---THE END---"
 
