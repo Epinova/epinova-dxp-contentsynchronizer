@@ -67,7 +67,9 @@ try {
         Write-Host "All blobs in $storageAccountContainer should be removed."    
     }
 
+    Write-Host "Start move all blobs to $storageAccountContainer."    
     Get-AzStorageBlob -Container $sasInfo.ContainerName -Context $sourceContext | Start-AzStorageBlobCopy -DestContainer $storageAccountContainer  -Context $destinationContext -Force
+    Write-Host "Moved all blobs."    
 
     ####################################################################################
 
