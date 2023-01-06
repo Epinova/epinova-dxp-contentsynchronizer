@@ -48,26 +48,26 @@ try {
 
     $sasInfo = Get-EDCSSasInfo -SasLink $dxpExportBlobsSasLink
 
-    $sourceContext = New-AzStorageContext -StorageAccountName $sourceStorageAccountName -SASToken $sasInfo.SasToken -ErrorAction Stop
+    $sourceContext = New-AzStorageContext -StorageAccountName $sasInfo.StorageAccountName -SASToken $sasInfo.SasToken -ErrorAction Stop
     if ($null -eq $sourceContext) {
-        Write-Error "Could not create a context against source storage account $sourceStorageAccountName"
+        Write-Error "Could not create a context against source storage account $($sasInfo.StorageAccountName)"
         exit
     }
 
-    $destinationStorageAccount = Get-AzStorageAccount -ResourceGroupName $DestinationResourceGroupName -Name $DestinationStorageAccountName
+    $destinationStorageAccount = Get-AzStorageAccount -ResourceGroupName $resourceGroupName -Name $storageAccountName
     if ($null -eq $destinationStorageAccount) {
-        Write-Error "Could not create a context against destination storage account $DestinationStorageAccountName"
+        Write-Error "Could not create a context against destination storage account $storageAccountName"
         exit
     }
     $destinationContext = $destinationStorageAccount.Context 
 
     if ($true -eq $CleanBeforeCopy){
-        Write-Host "Start remove all blobs in $DestinationContainerName."    
-        (Get-AzStorageBlob -Container $DestinationContainerName -Context $destinationContext | Sort-Object -Property LastModified -Descending) | Remove-AzStorageBlob
-        Write-Host "All blobs in $DestinationContainerName should be removed."    
+        Write-Host "Start remove all blobs in $storageAccountContainer."    
+        (Get-AzStorageBlob -Container $storageAccountContainer -Context $destinationContext | Sort-Object -Property LastModified -Descending) | Remove-AzStorageBlob
+        Write-Host "All blobs in $storageAccountContainer should be removed."    
     }
 
-    Get-AzStorageBlob -Container $sourceContainerName -Context $sourceContext | Start-AzStorageBlobCopy -DestContainer $DestinationContainerName  -Context $destinationContext -Force
+    Get-AzStorageBlob -Container $sasInfo.ContainerName -Context $sourceContext | Start-AzStorageBlobCopy -DestContainer $storageAccountContainer  -Context $destinationContext -Force
 
     ####################################################################################
 
