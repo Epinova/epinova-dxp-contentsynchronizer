@@ -1,8 +1,8 @@
 {
     "id": "b1c09c2d-6cf7-4196-a317-de417cacd867",
-    "name": "DxpImportDbToAzure",
+    "name": "ContentSyncDxpImportDbToAzure",
     "friendlyName": "Import DXP bacpac to Azure (Optimizely DXP)",
-    "description": "Import DXP database bacpac to a azure SQL Server. (Optimizely DXP)",
+    "description": "Content synchronizer - Import DXP database bacpac to a azure SQL Server. (Optimizely DXP)",
     "helpUrl": "https://github.com/Epinova/epinova-dxp-contentsynchronizer/blob/main/documentation/ImportDxpDbToAzure.md",
     "helpMarkDown": "[Extension page](https://marketplace.visualstudio.com/items?itemName=epinova-sweden.epinova-dxp-contentsynchronizer-extension)[Learn more about this task](https://github.com/Epinova/epinova-dxp-contentsynchronizer/blob/main/documentation/ImportDxpDbToAzure.md)",
     "category": "Deploy",
@@ -13,7 +13,7 @@
     "version": {
         "Major": 2,
         "Minor": 0,
-        "Patch": 3
+        "Patch": 4
     },
     "groups": [
         {

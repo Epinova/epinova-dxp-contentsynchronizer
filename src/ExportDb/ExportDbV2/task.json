@@ -1,8 +1,8 @@
 {
     "id": "f7579ecf-9ef3-4af0-8587-f16b44046241",
-    "name": "DxpExportDb",
+    "name": "ContentSyncDxpExportDb",
     "friendlyName": "Export DB (Optimizely DXP)",
-    "description": "Export specified database as a bacpac file. (Optimizely DXP)",
+    "description": "Content synchronizer - Export specified database as a bacpac file. (Optimizely DXP)",
     "helpUrl": "https://github.com/Epinova/epinova-dxp-contentsynchronizer/blob/main/documentation/ExportDb.md",
     "helpMarkDown": "[Extension page](https://marketplace.visualstudio.com/items?itemName=epinova-sweden.epinova-dxp-contentsynchronizer-extension)[Learn more about this task](https://github.com/Epinova/epinova-dxp-contentsynchronizer/blob/main/documentation/ExportDb.md)",
     "category": "Deploy",
@@ -13,7 +13,7 @@
     "version": {
         "Major": 2,
         "Minor": 0,
-        "Patch": 3
+        "Patch": 4
     },
     "groups": [
         {

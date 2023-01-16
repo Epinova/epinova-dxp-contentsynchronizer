@@ -69,7 +69,8 @@ try {
 
     Write-Host "Start move all blobs to $storageAccountContainer."    
     Get-AzStorageBlob -Container $sasInfo.ContainerName -Context $sourceContext | Start-AzStorageBlobCopy -DestContainer $storageAccountContainer  -Context $destinationContext -Force
-    Write-Host "Moved all blobs."    
+    Write-Host "Moved all blobs."
+    Write-Host "Note: Often you can see the blobs in container but they are 'empty'. Give it sometime. It will be moved ASAP."    
 
     ####################################################################################
 

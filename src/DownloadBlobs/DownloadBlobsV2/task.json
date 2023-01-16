@@ -1,8 +1,8 @@
 {
     "id": "7e3aebe1-de8f-46f9-9e2a-3eab86d8dcda",
-    "name": "DxpDownloadBlobs",
+    "name": "ContentSyncDxpDownloadBlobs",
     "friendlyName": "Download Blobs (Optimizely DXP)",
-    "description": "Download blobs from specified container. (Optimizely DXP)",
+    "description": "Content synchronizer - Download blobs from specified container. (Optimizely DXP)",
     "helpUrl": "https://github.com/Epinova/epinova-dxp-contentsynchronizer/blob/main/documentation/DownloadBlobs.md",
     "helpMarkDown": "[Extension page](https://marketplace.visualstudio.com/items?itemName=epinova-sweden.epinova-dxp-contentsynchronizer-extension)[Learn more about this task](https://github.com/Epinova/epinova-dxp-contentsynchronizer/blob/main/documentation/DownloadBlobs.md)",
     "category": "Deploy",
@@ -13,7 +13,7 @@
     "version": {
         "Major": 2,
         "Minor": 0,
-        "Patch": 0
+        "Patch": 1
     },
     "groups": [
         {

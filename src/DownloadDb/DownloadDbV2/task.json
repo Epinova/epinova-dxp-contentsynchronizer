@@ -1,8 +1,8 @@
 {
     "id": "61a9a50f-005a-4778-9484-840194ab6d61",
-    "name": "DxpDownloadDb",
+    "name": "ContentSyncDxpDownloadDb",
     "friendlyName": "Download DB (Optimizely DXP)",
-    "description": "Download specified database as a bacpac file. (Optimizely DXP)",
+    "description": "Content synchronizer - Download specified database as a bacpac file. (Optimizely DXP)",
     "helpUrl": "https://github.com/Epinova/epinova-dxp-contentsynchronizer/blob/main/documentation/DownloadDb.md",
     "helpMarkDown": "[Extension page](https://marketplace.visualstudio.com/items?itemName=epinova-sweden.epinova-dxp-contentsynchronizer-extension)[Learn more about this task](https://github.com/Epinova/epinova-dxp-contentsynchronizer/blob/main/documentation/DownloadDb.md)",
     "category": "Deploy",
@@ -13,7 +13,7 @@
     "version": {
         "Major": 2,
         "Minor": 0,
-        "Patch": 0
+        "Patch": 1
     },
     "groups": [
         {
