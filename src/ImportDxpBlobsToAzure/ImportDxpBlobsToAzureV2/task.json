@@ -12,14 +12,19 @@
     "author": "Ove Lartelius",
     "version": {
         "Major": 2,
-        "Minor": 0,
-        "Patch": 7
+        "Minor": 1,
+        "Patch": 0
     },
     "groups": [
         {
             "name": "Settings",
             "displayName": "Script settings",
             "isExpanded": true
+        },
+        {
+            "name": "AdvancedSettings",
+            "displayName": "Advanced settings",
+            "isExpanded": false
         },
         {
             "name": "Timeout",
@@ -32,7 +37,7 @@
             "isExpanded": false
         }
     ],
-    "releaseNotes": "v2.0.6: Created",
+    "releaseNotes": "v2.1.0: Added 'First' param. \r\n v2.0.6: Created",
     "minimumAgentVersion": "2.134.0",
     "inputs": [
         {
@@ -97,6 +102,15 @@
             "defaultValue": "false",
             "helpMarkDown": "If you want the script to remove all blobs in destination container before we sync the blobs.",
             "groupName": "Settings"
+        },
+        {
+            "name": "First",
+            "type": "int",
+            "label": "Move first X",
+            "required": false,
+            "defaultValue": "0",
+            "helpMarkDown": "The number of blobs that will be copied. 0 = all.",
+            "groupName": "AdvancedSettings"
         },
         {
             "name": "Timeout",

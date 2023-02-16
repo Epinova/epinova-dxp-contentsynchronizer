@@ -40,7 +40,7 @@ async function run() {
         let StorageAccountName: string = convertToNullIfUndefined(tl.getInput('StorageAccountName', false));
         let StorageAccountContainer: string = convertToNullIfUndefined(tl.getInput('StorageAccountContainer', false));
         let CleanBeforeCopy = tl.getBoolInput("CleanBeforeCopy", false);
-
+        let First = tl.getInput("First");
         let Timeout = tl.getInput("Timeout");
         let RunVerbose = tl.getBoolInput("RunVerbose", false);
 
@@ -77,7 +77,7 @@ async function run() {
 
         // Execute script to do the copy.
         let yourScriptPath2 = path.join(path.resolve(__dirname), 'ImportDxpBlobsToAzure.ps1');
-        contents.push(`${yourScriptPath2} -DxpExportBlobsSasLink '${DxpExportBlobsSasLink}' -SubscriptionId '${SubscriptionId}' -ResourceGroupName '${ResourceGroupName}' -StorageAccountName '${StorageAccountName}' -StorageAccountContainer '${StorageAccountContainer}' -CleanBeforeCopy ${CleanBeforeCopy} -Timeout ${Timeout}`); 
+        contents.push(`${yourScriptPath2} -DxpExportBlobsSasLink '${DxpExportBlobsSasLink}' -SubscriptionId '${SubscriptionId}' -ResourceGroupName '${ResourceGroupName}' -StorageAccountName '${StorageAccountName}' -StorageAccountContainer '${StorageAccountContainer}' -CleanBeforeCopy ${CleanBeforeCopy} -First ${First} -Timeout ${Timeout}`); 
 
 
 

@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "epinova-dxp-contentsynchronizer-extension",
     "publisher": "epinova-sweden",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "name": "Epinova DXP Content Synchronizer",
     "description": "Tasks to synchronize content (database/blobs) from Optimizely (formerly known as Episerver) DXP to Azure environment/resource.",
     "public": false,

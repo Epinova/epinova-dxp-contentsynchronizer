@@ -53,7 +53,7 @@ try {
         exit
     }
     else {
-        $blobContents = Get-AzStorageBlob -Container $sasInfo.ContainerName  -Context $ctx | Sort-Object -Property LastModified -Descending
+        $blobContents = Get-AzStorageBlob -Container $sasInfo.ContainerName -Context $ctx | Sort-Object -Property LastModified -Descending
 
         Write-Host "Found $($blobContents.Length) BlobContent."
 

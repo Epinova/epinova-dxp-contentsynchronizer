@@ -6,6 +6,7 @@ Param(
     $StorageAccountName,
     $StorageAccountContainer,
     $CleanBeforeCopy,
+    $First,
 
     $Timeout,
     $RunVerbose
@@ -19,6 +20,7 @@ try {
     $storageAccountName = $StorageAccountName
     $storageAccountContainer = $StorageAccountContainer
     $cleanBeforeCopy = [System.Convert]::ToBoolean($CleanBeforeCopy)
+    $first = $First
 
     $timeout = $Timeout
     $runVerbose = [System.Convert]::ToBoolean($RunVerbose)
@@ -41,6 +43,7 @@ try {
     Write-Host "StorageAccountName:         $storageAccountName"
     Write-Host "StorageAccountContainer:    $storageAccountContainer"
     Write-Host "CleanBeforeCopy:            $cleanBeforeCopy"
+    Write-Host "First:                      $first"
     Write-Host "Timeout:                    $timeout"
     Write-Host "RunVerbose:                 $runVerbose"
 
@@ -62,14 +65,22 @@ try {
     $destinationContext = $destinationStorageAccount.Context 
 
     if ($true -eq $CleanBeforeCopy){
-        Write-Host "Start remove all blobs in $storageAccountContainer."    
-        (Get-AzStorageBlob -Container $storageAccountContainer -Context $destinationContext | Sort-Object -Property LastModified -Descending) | Remove-AzStorageBlob
-        Write-Host "All blobs in $storageAccountContainer should be removed."    
+        $destinationBlobs = Get-AzStorageBlob -Container $storageAccountContainer -Context $destinationContext
+        Write-Host "Start remove $($destinationBlobs.Length) blobs in $storageAccountContainer."    
+        $destinationBlobs | Remove-AzStorageBlob
+        Write-Host "$($destinationBlobs.Length) blobs in $storageAccountContainer have be removed."    
     }
 
-    Write-Host "Start move all blobs to $storageAccountContainer."    
-    Get-AzStorageBlob -Container $sasInfo.ContainerName -Context $sourceContext | Start-AzStorageBlobCopy -DestContainer $storageAccountContainer  -Context $destinationContext -Force
-    Write-Host "Moved all blobs."
+    $sourceBlobs = Get-AzStorageBlob -Container $sasInfo.ContainerName -Context $sourceContext | Sort-Object -Property LastModified -Descending
+    Write-Host "Found $($sourceBlobs.Length) blobs in source container."    
+
+    if ($first -gt 0) {
+        Write-Host "Changed to only move the $first blobs to $storageAccountContainer."
+        $sourceBlobs = $sourceBlobs | Select-Object -First $first 
+    }
+    Write-Host "Start move $($sourceBlobs.Length) blobs to $storageAccountContainer."    
+    $sourceBlobs | Start-AzStorageBlobCopy -DestContainer $storageAccountContainer -Context $destinationContext -Force
+    Write-Host "Moved $($sourceBlobs.Length) blobs."
     Write-Host "Note: Often you can see the blobs in container but they are 'empty'. Give it sometime. It will be moved ASAP."    
 
     ####################################################################################

@@ -1,5 +1,11 @@
 # Release notes
 
+## v0.2.0
+- Added possibility to copie first x blobs in Import DXP blobs to Azure.
+
+## v0.1.1
+- Bug fix for blob context connection.
+
 ## v0.1.0
 - Set new names on tasks.
 
