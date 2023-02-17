@@ -15,6 +15,7 @@ export async function run() {
         let Environment = tl.getInput("Environment");
         let DxpContainer = tl.getInput("DxpContainer");
         let RetentionHours = tl.getInput("RetentionHours");
+        let TryConnect = tl.getBoolInput("TryConnect", false);
         let Timeout = tl.getInput("Timeout");
         let RunVerbose = tl.getBoolInput("RunVerbose", false);
 
@@ -40,6 +41,7 @@ export async function run() {
         "-Environment", Environment,
         "-DxpContainer", DxpContainer,
         "-RetentionHours", RetentionHours,
+        "-TryConnect", TryConnect,
         "-Timeout", Timeout
         ];
         if (RunVerbose) {
@@ -54,6 +56,7 @@ export async function run() {
         "-Environment", Environment,
         "-DxpContainer", DxpContainer,
         "-RetentionHours", RetentionHours,
+        "-TryConnect", TryConnect,
         "-Timeout", Timeout
         ];
         if (RunVerbose) {

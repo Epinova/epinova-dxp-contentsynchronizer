@@ -12,8 +12,8 @@
     "author": "Ove Lartelius",
     "version": {
         "Major": 2,
-        "Minor": 0,
-        "Patch": 4
+        "Minor": 1,
+        "Patch": 0
     },
     "groups": [
         {
@@ -32,7 +32,7 @@
             "isExpanded": false
         }
     ],
-    "releaseNotes": "v2.0.3: Created task",
+    "releaseNotes": "v2.1.0: Try connect function \r\nv2.0.3: Created task",
     "minimumAgentVersion": "2.134.0",
     "inputs": [
         {
@@ -98,6 +98,15 @@
             "groupName": "Settings"
         },
         {
+            "name": "TryConnect",
+            "type": "boolean",
+            "label": "Try connection",
+            "required": true,
+            "defaultValue": "false",
+            "helpMarkDown": "Will try to connect to the stageaccount container and show count of blobs.",
+            "groupName": "Settings"
+        },
+        {
             "name": "Timeout",
             "type": "int",
             "label": "Script timeout (in seconds)",
@@ -112,7 +121,7 @@
             "label": "Run Verbose",
             "required": true,
             "defaultValue": "false",
-            "helpMarkDown": "If tou want to run in verbose mode and see all information.",
+            "helpMarkDown": "If you want to run in verbose mode and see all information.",
             "groupName": "ErrorHandlingOptions"
         },
         {
