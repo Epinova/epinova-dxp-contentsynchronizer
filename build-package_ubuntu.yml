@@ -53,5 +53,14 @@ steps:
       rootFolder: src
       outputPath: '$(Build.ArtifactStagingDirectory)/$(ExtensionFileName)$(ExtensionFileVersion).vsix'
 
+  - task: PublishAzureDevOpsExtension@4
+    inputs:
+      connectTo: 'VsTeam'
+      connectedServiceName: 'Visual Studio Marketplace'
+      fileType: 'vsix'
+      vsixFile: '$(Build.ArtifactStagingDirectory)/$(ExtensionFileName)$(ExtensionFileVersion).vsix'
+      updateTasksVersion: false
+      extensionVisibility: 'private'
+
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifact: drop'
