@@ -501,3 +501,24 @@ function Get-EDCSSasInfo {
     
     return $sasInfo
 }
+
+function Initialize-AzureStorageModule {
+    $azModuleLoaded = Get-Module -Name "Az.Storage"
+
+    if (-not ($azureModuleLoaded -or $azModuleLoaded)) {
+        try {
+            $null = Import-Module -Name "Az.Storage" -ErrorAction Stop
+            $azModuleLoaded = $true
+        }
+        catch {
+            Write-Verbose "Tried to find 'Az.Storage', module couldn't be imported."
+        }
+    }
+
+    if ($azModuleLoaded) {
+        "Az"
+    }
+    else {
+        throw "'Az.Storage' module is required to run this cmdlet."
+    }
+}

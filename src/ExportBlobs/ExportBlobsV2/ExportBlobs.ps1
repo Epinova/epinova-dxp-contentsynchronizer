@@ -77,6 +77,7 @@ try {
     }
 
     if ($tryConnect){
+        Initialize-AzureStorageModule
         $sasInfo = Get-EDCSSasInfo -SasLink $SourceSasLink
         $sourceContext = New-AzStorageContext -StorageAccountName $sasInfo.StorageAccountName -SASToken $sasInfo.SasToken -ErrorAction Stop
         if ($null -eq $sourceContext) {

@@ -13,7 +13,7 @@
     "version": {
         "Major": 2,
         "Minor": 1,
-        "Patch": 0
+        "Patch": 1
     },
     "groups": [
         {
@@ -32,7 +32,7 @@
             "isExpanded": false
         }
     ],
-    "releaseNotes": "v2.1.0: Try connect function \r\nv2.0.3: Created task",
+    "releaseNotes": "v2.1.1: Try connect function \r\nv2.0.3: Created task",
     "minimumAgentVersion": "2.134.0",
     "inputs": [
         {
