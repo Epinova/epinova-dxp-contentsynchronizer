@@ -43,7 +43,7 @@ try {
     Write-Host "Timeout:            $timeout"
     Write-Host "RunVerbose:         $runVerbose"
 
-    # . "$PSScriptRoot\ps_modules\EpinovaDxpContentSynchronizerUtil.ps1"
+    . "$PSScriptRoot\ps_modules\EpinovaDxpContentSynchronizerUtil.ps1"
 
     # Mount-EDCSPsModulesPath
 
