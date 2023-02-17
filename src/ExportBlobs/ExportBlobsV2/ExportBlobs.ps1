@@ -43,11 +43,11 @@ try {
     Write-Host "Timeout:            $timeout"
     Write-Host "RunVerbose:         $runVerbose"
 
-    . "$PSScriptRoot\ps_modules\EpinovaDxpContentSynchronizerUtil.ps1"
+    # . "$PSScriptRoot\ps_modules\EpinovaDxpContentSynchronizerUtil.ps1"
 
-    Mount-EDCSPsModulesPath
+    # Mount-EDCSPsModulesPath
 
-    Initialize-EDCSEpiCload
+    # Initialize-EDCSEpiCload
 
     Write-EDCSDxpHostVersion
 
@@ -77,7 +77,7 @@ try {
     }
 
     if ($tryConnect){
-        Initialize-AzureStorageModule
+        #Initialize-AzureStorageModule
         $sasInfo = Get-EDCSSasInfo -SasLink $SourceSasLink
         $sourceContext = New-AzStorageContext -StorageAccountName $sasInfo.StorageAccountName -SASToken $sasInfo.SasToken -ErrorAction Stop
         if ($null -eq $sourceContext) {

@@ -10,6 +10,13 @@ param (
 try {
     $isWin = $platform -eq "Windows"
 
+    # Kick start EpiCloud
+    . "$PSScriptRoot\ps_modules\EpinovaDxpContentSynchronizerUtil.ps1"
+
+    Mount-EDCSPsModulesPath
+
+    Initialize-EDCSEpiCload
+
     . (Join-Path $PSScriptRoot "Utility.ps1")
     $isHostedAgent = Test-IsHostedAgentPathPresent -isWin $isWin
  
