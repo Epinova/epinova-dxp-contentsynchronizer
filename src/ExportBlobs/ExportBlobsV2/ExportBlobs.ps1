@@ -6,6 +6,7 @@ Param(
     $Environment,
     $DxpContainer,
     $RetentionHours,
+    $TryConnect,
     $Timeout,
     $RunVerbose
 )
@@ -17,6 +18,7 @@ try {
     $environment = $Environment
     $dxpContainer = $DxpContainer
     $retentionHours = $RetentionHours
+    $tryConnect = $TryConnect
     $timeout = $Timeout
     $runVerbose = [System.Convert]::ToBoolean($RunVerbose)
 
@@ -37,6 +39,7 @@ try {
     Write-Host "Environment:        $environment"
     Write-Host "DxpContainer:       $dxpContainer"
     Write-Host "RetentionHours:     $retentionHours"
+    Write-Host "TryConnect:         $tryConnect"
     Write-Host "Timeout:            $timeout"
     Write-Host "RunVerbose:         $runVerbose"
 
@@ -71,6 +74,18 @@ try {
     if ($null -ne $SourceSasLink){
         Write-Host "Setvariable DxpExportBlobsSasLink: $SourceSasLink"
         Write-Host "##vso[task.setvariable variable=DxpExportBlobsSasLink;]$SourceSasLink"
+    }
+
+    if ($tryConnect){
+        $sasInfo = Get-EDCSSasInfo -SasLink $SourceSasLink
+        $sourceContext = New-AzStorageContext -StorageAccountName $sasInfo.StorageAccountName -SASToken $sasInfo.SasToken -ErrorAction Stop
+        if ($null -eq $sourceContext) {
+            Write-Error "Could not create a context against storage account $($sasInfo.StorageAccountName)"
+            exit
+        }
+        $sourceBlobs = Get-AzStorageBlob -Container $sasInfo.ContainerName -Context $sourceContext | Sort-Object -Property LastModified -Descending
+        Write-Host "Found $($sourceBlobs.Length) blobs in container '$($sasInfo.ContainerName)'."
+        Write-Host "Connection seems to be okey."  
     }
 
     ####################################################################################
