@@ -505,9 +505,10 @@ function Get-EDCSSasInfo {
 function Initialize-AzureStorageModule {
     $azModuleLoaded = Get-Module -Name "Az.Storage"
 
-    if (-not ($azureModuleLoaded -or $azModuleLoaded)) {
+    if (-not ($azModuleLoaded)) {
         try {
             $null = Import-Module -Name "Az.Storage" -ErrorAction Stop
+            #$null = Install-Module -Name "Az.Storage" -ErrorAction Stop
             $azModuleLoaded = $true
         }
         catch {
