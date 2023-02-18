@@ -49,39 +49,44 @@ try {
 
     . "$PSScriptRoot\ps_modules\EpinovaDxpContentSynchronizerUtil.ps1"
 
-    $sasInfo = Get-EDCSSasInfo -SasLink $dxpExportBlobsSasLink
+    [Reflection.Assembly]::LoadFile("$PSScriptRoot\ps_modules\AzLib.dll")
 
-    $sourceContext = New-AzStorageContext -StorageAccountName $sasInfo.StorageAccountName -SASToken $sasInfo.SasToken -ErrorAction Stop
-    if ($null -eq $sourceContext) {
-        Write-Error "Could not create a context against source storage account $($sasInfo.StorageAccountName)"
-        exit
-    }
+    $blobService = new-object AzLib.BlobService
+    $blobService.CopyBlobs($dxpExportBlobsSasLink, "DefaultEndpointsProtocol=https;AccountName=bwoffshore;AccountKey=iRjboiZ7W7P/kwgu2oZboH0vWQwPU9E7C9NWHwATm3j87vzlykPaJ4rILigRCLbJRVVI/nLj2KX3ATWni7tYXg==;EndpointSuffix=core.windows.net", "deleteme")
 
-    $destinationStorageAccount = Get-AzStorageAccount -ResourceGroupName $resourceGroupName -Name $storageAccountName
-    if ($null -eq $destinationStorageAccount) {
-        Write-Error "Could not create a context against destination storage account $storageAccountName"
-        exit
-    }
-    $destinationContext = $destinationStorageAccount.Context 
+    # $sasInfo = Get-EDCSSasInfo -SasLink $dxpExportBlobsSasLink
 
-    if ($true -eq $CleanBeforeCopy){
-        $destinationBlobs = Get-AzStorageBlob -Container $storageAccountContainer -Context $destinationContext
-        Write-Host "Start remove $($destinationBlobs.Length) blobs in $storageAccountContainer."    
-        $destinationBlobs | Remove-AzStorageBlob
-        Write-Host "$($destinationBlobs.Length) blobs in $storageAccountContainer have be removed."    
-    }
+    # $sourceContext = New-AzStorageContext -StorageAccountName $sasInfo.StorageAccountName -SASToken $sasInfo.SasToken -ErrorAction Stop
+    # if ($null -eq $sourceContext) {
+    #     Write-Error "Could not create a context against source storage account $($sasInfo.StorageAccountName)"
+    #     exit
+    # }
 
-    $sourceBlobs = Get-AzStorageBlob -Container $sasInfo.ContainerName -Context $sourceContext | Sort-Object -Property LastModified -Descending
-    Write-Host "Found $($sourceBlobs.Length) blobs in source container."    
+    # $destinationStorageAccount = Get-AzStorageAccount -ResourceGroupName $resourceGroupName -Name $storageAccountName
+    # if ($null -eq $destinationStorageAccount) {
+    #     Write-Error "Could not create a context against destination storage account $storageAccountName"
+    #     exit
+    # }
+    # $destinationContext = $destinationStorageAccount.Context 
 
-    if ($first -gt 0) {
-        Write-Host "Changed to only move the $first blobs to $storageAccountContainer."
-        $sourceBlobs = $sourceBlobs | Select-Object -First $first 
-    }
-    Write-Host "Start move $($sourceBlobs.Length) blobs to $storageAccountContainer."    
-    $sourceBlobs | Start-AzStorageBlobCopy -DestContainer $storageAccountContainer -Context $destinationContext -Force
-    Write-Host "Moved $($sourceBlobs.Length) blobs."
-    Write-Host "Note: Often you can see the blobs in container but they are 'empty'. Give it sometime. It will be moved ASAP."    
+    # if ($true -eq $CleanBeforeCopy){
+    #     $destinationBlobs = Get-AzStorageBlob -Container $storageAccountContainer -Context $destinationContext
+    #     Write-Host "Start remove $($destinationBlobs.Length) blobs in $storageAccountContainer."    
+    #     $destinationBlobs | Remove-AzStorageBlob
+    #     Write-Host "$($destinationBlobs.Length) blobs in $storageAccountContainer have be removed."    
+    # }
+
+    # $sourceBlobs = Get-AzStorageBlob -Container $sasInfo.ContainerName -Context $sourceContext | Sort-Object -Property LastModified -Descending
+    # Write-Host "Found $($sourceBlobs.Length) blobs in source container."    
+
+    # if ($first -gt 0) {
+    #     Write-Host "Changed to only move the $first blobs to $storageAccountContainer."
+    #     $sourceBlobs = $sourceBlobs | Select-Object -First $first 
+    # }
+    # Write-Host "Start move $($sourceBlobs.Length) blobs to $storageAccountContainer."    
+    # $sourceBlobs | Start-AzStorageBlobCopy -DestContainer $storageAccountContainer -Context $destinationContext -Force
+    # Write-Host "Moved $($sourceBlobs.Length) blobs."
+    # Write-Host "Note: Often you can see the blobs in container but they are 'empty'. Give it sometime. It will be moved ASAP."    
 
     ####################################################################################
 
