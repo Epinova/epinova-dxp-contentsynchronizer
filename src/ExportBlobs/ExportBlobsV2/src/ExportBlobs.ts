@@ -43,7 +43,7 @@ async function run() {
 
         let DxpContainer: string = convertToNullIfUndefined(tl.getInput('DxpContainer', false));
         let RetentionHours: string = convertToNullIfUndefined(tl.getInput('RetentionHours', false));
-        let TryConnect = tl.getBoolInput("TryConnect", false);
+        //let TryConnect = tl.getBoolInput("TryConnect", false);
 
         let Timeout = tl.getInput("Timeout");
         let RunVerbose = tl.getBoolInput("RunVerbose", false);
@@ -68,14 +68,14 @@ async function run() {
         // let yourScriptPath1 = path.join(path.resolve(__dirname), 'GetSasTokenFromDxp.ps1');
         // contents.push(`${yourScriptPath1} -ClientKey '${ClientKey}' -ClientSecret '${ClientSecret}' -ProjectId '${ProjectId}' -Environment '${Environment}' -DxpContainer '${DxpContainer}' -Timeout ${Timeout}`); 
 
-        const makeModuleAvailableScriptPath = path.join(path.resolve(__dirname), 'TryMakingModuleAvailable.ps1');
-        contents.push(`${makeModuleAvailableScriptPath} -targetVersion '${targetAzurePs}' -platform Linux`);
+        //***const makeModuleAvailableScriptPath = path.join(path.resolve(__dirname), 'TryMakingModuleAvailable.ps1');
+        //***contents.push(`${makeModuleAvailableScriptPath} -targetVersion '${targetAzurePs}' -platform Linux`);
 
 
-        let azFilePath = path.join(path.resolve(__dirname), 'InitializeAz.ps1');
-        contents.push(`$ErrorActionPreference = '${_vsts_input_errorActionPreference}'`); 
+        //***let azFilePath = path.join(path.resolve(__dirname), 'InitializeAz.ps1');
+        //***contents.push(`$ErrorActionPreference = '${_vsts_input_errorActionPreference}'`); 
         //contents.push(`${azFilePath} -endpoint '${endpoint}'`);
-        contents.push(`${azFilePath}`);
+        //***contents.push(`${azFilePath}`);
 
         // let azStorageFilePath = path.join(path.resolve(__dirname), 'InitializeAzStorage.ps1');
         // contents.push(`$ErrorActionPreference = '${_vsts_input_errorActionPreference}'`); 
@@ -83,7 +83,8 @@ async function run() {
 
         // Execute script to do the copy.
         let yourScriptPath2 = path.join(path.resolve(__dirname), 'ExportBlobs.ps1');
-        contents.push(`${yourScriptPath2} -ClientKey '${ClientKey}' -ClientSecret '${ClientSecret}' -ProjectId '${ProjectId}' -Environment '${Environment}' -DxpContainer '${DxpContainer}' -RetentionHours ${RetentionHours} -TryConnect ${TryConnect} -Timeout ${Timeout} -RunVerbose ${RunVerbose}`); 
+        //contents.push(`${yourScriptPath2} -ClientKey '${ClientKey}' -ClientSecret '${ClientSecret}' -ProjectId '${ProjectId}' -Environment '${Environment}' -DxpContainer '${DxpContainer}' -RetentionHours ${RetentionHours} -TryConnect ${TryConnect} -Timeout ${Timeout} -RunVerbose ${RunVerbose}`); 
+        contents.push(`${yourScriptPath2} -ClientKey '${ClientKey}' -ClientSecret '${ClientSecret}' -ProjectId '${ProjectId}' -Environment '${Environment}' -DxpContainer '${DxpContainer}' -RetentionHours ${RetentionHours} -Timeout ${Timeout} -RunVerbose ${RunVerbose}`); 
 
 
 

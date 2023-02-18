@@ -17,7 +17,7 @@ function Initialize-EDCSEpiCload{
     #>
     if (-not (Get-Module -Name EpiCloud -ListAvailable)) {
         Write-Host "Could not find EpiCloud."
-        Import-Module -Name "EpiCloud" -MinimumVersion 1.2.0 -Verbose
+        Import-Module -Name "EpiCloud" -MinimumVersion 1.2.0
         Write-Host "Import EpiCloud."
     }
     $version = Get-Module -Name EpiCloud -ListAvailable | Select-Object Version
