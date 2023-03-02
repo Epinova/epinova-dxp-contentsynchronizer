@@ -63,13 +63,13 @@ async function run() {
         // let yourScriptPath1 = path.join(path.resolve(__dirname), 'GetSasTokenFromDxp.ps1');
         // contents.push(`${yourScriptPath1} -ClientKey '${ClientKey}' -ClientSecret '${ClientSecret}' -ProjectId '${ProjectId}' -Environment '${Environment}' -DxpContainer '${DxpContainer}' -Timeout ${Timeout}`); 
 
-        const makeModuleAvailableScriptPath = path.join(path.resolve(__dirname), 'TryMakingModuleAvailable.ps1');
-        contents.push(`${makeModuleAvailableScriptPath} -targetVersion '${targetAzurePs}' -platform Linux`);
+        // const makeModuleAvailableScriptPath = path.join(path.resolve(__dirname), 'TryMakingModuleAvailable.ps1');
+        // contents.push(`${makeModuleAvailableScriptPath} -targetVersion '${targetAzurePs}' -platform Linux`);
 
 
-        let azFilePath = path.join(path.resolve(__dirname), 'InitializeAz.ps1');
-        contents.push(`$ErrorActionPreference = '${_vsts_input_errorActionPreference}'`); 
-        contents.push(`${azFilePath} -endpoint '${endpoint}'`);
+        // let azFilePath = path.join(path.resolve(__dirname), 'InitializeAz.ps1');
+        // contents.push(`$ErrorActionPreference = '${_vsts_input_errorActionPreference}'`); 
+        // contents.push(`${azFilePath} -endpoint '${endpoint}'`);
 
         // let azStorageFilePath = path.join(path.resolve(__dirname), 'InitializeAzStorage.ps1');
         // contents.push(`$ErrorActionPreference = '${_vsts_input_errorActionPreference}'`); 
