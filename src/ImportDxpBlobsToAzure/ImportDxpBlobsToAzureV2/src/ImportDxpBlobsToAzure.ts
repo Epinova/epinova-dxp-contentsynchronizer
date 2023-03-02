@@ -45,11 +45,19 @@ async function run() {
         let Timeout = tl.getInput("Timeout");
         let RunVerbose = tl.getBoolInput("RunVerbose", false);
 
+        console.log("Found sasLink:" + DxpExportBlobsSasLink);
         const sasLink = new URL(DxpExportBlobsSasLink);
+        console.log("sasLink:" + sasLink);
+        const sasToken = sasLink.search;
+        console.log("sasToken:" + sasToken);
+        const endpoint = `${sasLink.protocol}//${sasLink.hostname}${sasToken}`;
+        console.log("endpoint:" + endpoint);
         const destinationConnectionString = "DefaultEndpointsProtocol=https;AccountName=bwoffshore;AccountKey=iRjboiZ7W7P/kwgu2oZboH0vWQwPU9E7C9NWHwATm3j87vzlykPaJ4rILigRCLbJRVVI/nLj2KX3ATWni7tYXg==;EndpointSuffix=core.windows.net";
         const destinationContainer = "deleteme";
 
-        const sourceBlobServiceClient = new BlobServiceClient(`${sasLink.protocol}://${sasLink.hostname}?${sasLink.search}`, null);
+        console.log("Connect to source");
+        const sourceBlobServiceClient = new BlobServiceClient(endpoint, null);
+        console.log("Connected to source");
         const sourceBlobContainerClient = sourceBlobServiceClient.getContainerClient(sasLink.pathname);
 
         const destinationBlobServiceClient = BlobServiceClient.fromConnectionString(destinationConnectionString);
