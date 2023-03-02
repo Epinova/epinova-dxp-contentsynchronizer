@@ -52,16 +52,25 @@ async function run() {
         console.log("sasToken:" + sasToken);
         const endpoint = `${sasLink.protocol}//${sasLink.hostname}/${sasToken}`;
         console.log("endpoint:" + endpoint);
+        const containerName = sasLink.pathname;
+        console.log("containerName:" + containerName);
         const destinationConnectionString = "DefaultEndpointsProtocol=https;AccountName=bwoffshore;AccountKey=iRjboiZ7W7P/kwgu2oZboH0vWQwPU9E7C9NWHwATm3j87vzlykPaJ4rILigRCLbJRVVI/nLj2KX3ATWni7tYXg==;EndpointSuffix=core.windows.net";
         const destinationContainer = "deleteme";
 
         console.log("Connect to source");
         const sourceBlobServiceClient = new BlobServiceClient(DxpExportBlobsSasLink, null);
         console.log("Connected to source");
-        const sourceBlobContainerClient = sourceBlobServiceClient.getContainerClient(sasLink.pathname);
 
+        console.log("Container client source");
+        const sourceBlobContainerClient = sourceBlobServiceClient.getContainerClient(containerName);
+        console.log("Container client source connected");
+
+        console.log("Connect to destination");
         const destinationBlobServiceClient = BlobServiceClient.fromConnectionString(destinationConnectionString);
+        console.log("Connected to destination");
+        console.log("Container client destination");
         const destinationBlobContainerClient = destinationBlobServiceClient.getContainerClient(destinationContainer);
+        console.log("Container client destination connected");
 
         const blobs = sourceBlobContainerClient.listBlobsFlat();
         for await (const blob of blobs) {

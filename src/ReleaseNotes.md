@@ -1,6 +1,6 @@
 # Release notes
 
-## v0.3.15
+## v0.3.16
 -Added try connection function to ExportBlobs to test connection to the container with the SAS link that we got from DXP.
 
 ## v0.2.0
