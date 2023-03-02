@@ -52,7 +52,8 @@ async function run() {
         console.log("sasToken:" + sasToken);
         const endpoint = `${sasLink.protocol}//${sasLink.hostname}/${sasToken}`;
         console.log("endpoint:" + endpoint);
-        const containerName = sasLink.pathname;
+        const containerName = sasLink.pathname.replace("/", "");
+
         console.log("containerName:" + containerName);
         const destinationConnectionString = "DefaultEndpointsProtocol=https;AccountName=bwoffshore;AccountKey=iRjboiZ7W7P/kwgu2oZboH0vWQwPU9E7C9NWHwATm3j87vzlykPaJ4rILigRCLbJRVVI/nLj2KX3ATWni7tYXg==;EndpointSuffix=core.windows.net";
         const destinationContainer = "deleteme";
