@@ -49,11 +49,16 @@ try {
 
     . "$PSScriptRoot\ps_modules\EpinovaDxpContentSynchronizerUtil.ps1"
 
-    #[Reflection.Assembly]::LoadFile("$PSScriptRoot\ps_modules\AzLib.dll")
-    using assembly "$PSScriptRoot\ps_modules\AzLib.dll"
+    & "$PSScriptRoot\ps_modules\AzLibCli.exe" numberofblobs $dxpExportBlobsSasLink
 
-    $blobService = new-object AzLib.BlobService
-    $blobService.CopyBlobs($dxpExportBlobsSasLink, "DefaultEndpointsProtocol=https;AccountName=bwoffshore;AccountKey=iRjboiZ7W7P/kwgu2oZboH0vWQwPU9E7C9NWHwATm3j87vzlykPaJ4rILigRCLbJRVVI/nLj2KX3ATWni7tYXg==;EndpointSuffix=core.windows.net", "deleteme")
+    $azureStorageEndpoint = "DefaultEndpointsProtocol=https;AccountName=bwoffshore;AccountKey=iRjboiZ7W7P/kwgu2oZboH0vWQwPU9E7C9NWHwATm3j87vzlykPaJ4rILigRCLbJRVVI/nLj2KX3ATWni7tYXg==;EndpointSuffix=core.windows.net"
+    $azureStorageContainer = "deleteme"
+    & "$PSScriptRoot\ps_modules\AzLibCli.exe" copyblobs $dxpExportBlobsSasLink $azureStorageEndpoint $azureStorageContainer -v
+
+    #[Reflection.Assembly]::LoadFile("$PSScriptRoot\ps_modules\AzLib.dll")
+
+    #$blobService = new-object AzLib.BlobService
+    #$blobService.CopyBlobs($dxpExportBlobsSasLink, "DefaultEndpointsProtocol=https;AccountName=bwoffshore;AccountKey=iRjboiZ7W7P/kwgu2oZboH0vWQwPU9E7C9NWHwATm3j87vzlykPaJ4rILigRCLbJRVVI/nLj2KX3ATWni7tYXg==;EndpointSuffix=core.windows.net", "deleteme")
 
     # $sasInfo = Get-EDCSSasInfo -SasLink $dxpExportBlobsSasLink
 
