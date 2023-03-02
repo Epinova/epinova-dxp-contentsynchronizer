@@ -56,7 +56,7 @@ async function run() {
         const destinationContainer = "deleteme";
 
         console.log("Connect to source");
-        const sourceBlobServiceClient = new BlobServiceClient(endpoint, null);
+        const sourceBlobServiceClient = new BlobServiceClient(DxpExportBlobsSasLink, null);
         console.log("Connected to source");
         const sourceBlobContainerClient = sourceBlobServiceClient.getContainerClient(sasLink.pathname);
 
