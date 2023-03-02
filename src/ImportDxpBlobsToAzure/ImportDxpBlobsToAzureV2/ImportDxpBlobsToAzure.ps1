@@ -49,11 +49,13 @@ try {
 
     #. "$PSScriptRoot\ps_modules\EpinovaDxpContentSynchronizerUtil.ps1"
 
-    & "$PSScriptRoot\ps_modules\AzLibCli.exe" numberofblobs $dxpExportBlobsSasLink
+    #& "$PSScriptRoot\ps_modules\AzLibCli.exe" numberofblobs $dxpExportBlobsSasLink
+    .\AzLibCli.exe numberofblobs $dxpExportBlobsSasLink
 
     $azureStorageEndpoint = "DefaultEndpointsProtocol=https;AccountName=bwoffshore;AccountKey=iRjboiZ7W7P/kwgu2oZboH0vWQwPU9E7C9NWHwATm3j87vzlykPaJ4rILigRCLbJRVVI/nLj2KX3ATWni7tYXg==;EndpointSuffix=core.windows.net"
     $azureStorageContainer = "deleteme"
-    & "$PSScriptRoot\ps_modules\AzLibCli.exe" copyblobs $dxpExportBlobsSasLink $azureStorageEndpoint $azureStorageContainer -v
+    #& "$PSScriptRoot\ps_modules\AzLibCli.exe" copyblobs $dxpExportBlobsSasLink $azureStorageEndpoint $azureStorageContainer -v
+    .\AzLibCli.exe copyblobs $dxpExportBlobsSasLink $azureStorageEndpoint $azureStorageContainer -v
     
 
     #[Reflection.Assembly]::LoadFile("$PSScriptRoot\ps_modules\AzLib.dll")
