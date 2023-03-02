@@ -50,7 +50,7 @@ async function run() {
         console.log("sasLink:" + sasLink);
         const sasToken = sasLink.search;
         console.log("sasToken:" + sasToken);
-        const endpoint = `${sasLink.protocol}//${sasLink.hostname}/${sasToken}`;
+        const endpoint = `${sasLink.protocol}//${sasLink.hostname}${sasToken}`;
         console.log("endpoint:" + endpoint);
         const containerName = sasLink.pathname.replace("/", "");
 
@@ -59,7 +59,9 @@ async function run() {
         const destinationContainer = "deleteme";
 
         console.log("Connect to source");
-        const sourceBlobServiceClient = new BlobServiceClient(DxpExportBlobsSasLink, null);
+        //const sourceBlobServiceClient = new BlobServiceClient(DxpExportBlobsSasLink, null);
+        // https://YOUR-RESOURCE-NAME.blob.core.windows.net?YOUR-SAS-TOKEN
+        const sourceBlobServiceClient = new BlobServiceClient(endpoint, null);
         console.log("Connected to source");
 
         console.log("Container client source");
