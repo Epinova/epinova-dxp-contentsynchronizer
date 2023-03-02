@@ -72,12 +72,24 @@ async function run() {
         const destinationBlobContainerClient = destinationBlobServiceClient.getContainerClient(destinationContainer);
         console.log("Container client destination connected");
 
+        console.log("Will list blobs");
         const blobs = sourceBlobContainerClient.listBlobsFlat();
+        console.log("listed blobs");
         for await (const blob of blobs) {
-            const sourceBlobClient = sourceBlobContainerClient.getBlobClient(blob.name);
+            console.log("blob:" + blob.name);
 
+            //const sourceBlobClient = sourceBlobContainerClient.getBlobClient(blob.name);
+
+            const blobUrl = `${sasLink.protocol}//${sasLink.hostname}/${containerName}/${blob.name}${sasToken}`;
+            console.log("blobUrl:" + blobUrl);
+
+            console.log("Will get destination blob");
             const destinationBlobClient = destinationBlobContainerClient.getBlobClient(blob.name);
-            destinationBlobClient.beginCopyFromURL(sourceBlobClient.url);
+            console.log("Got destination blob");
+            console.log("Will start copy" + blob.name);
+            destinationBlobClient.beginCopyFromURL(blobUrl);
+            console.log(blob.name + " copied");
+            //destinationBlobClient.beginCopyFromURL(sourceBlobClient.url);
             if (RunVerbose) console.log(`Copy ${blob.name}`);
         }
            
