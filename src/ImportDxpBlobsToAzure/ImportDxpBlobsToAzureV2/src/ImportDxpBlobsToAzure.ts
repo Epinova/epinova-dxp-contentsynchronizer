@@ -5,6 +5,7 @@ import tl = require('azure-pipelines-task-lib/task');
 import tr = require('azure-pipelines-task-lib/toolrunner');
 
 import { AzureRMEndpoint } from 'azure-pipelines-tasks-azure-arm-rest-v2/azure-arm-endpoint';
+import { BlobServiceClient } from '@azure/storage-blob';
 var uuidV4 = require('uuid/v4');
 
 function convertToNullIfUndefined<T>(arg: T): T|null {
@@ -28,13 +29,13 @@ async function run() {
 
         let _vsts_input_failOnStandardError = convertToNullIfUndefined(tl.getBoolInput('FailOnStandardError', false));
         
-        let DxpExportBlobsSasLink = tl.getInput("DxpExportBlobsSasLink");
+        const DxpExportBlobsSasLink = tl.getInput("DxpExportBlobsSasLink");
 
         let serviceName = tl.getInput('ConnectedServiceNameARM',/*required*/true);
         let endpointObject= await new AzureRMEndpoint(serviceName).getEndpoint();
         let input_workingDirectory = "";
         let isDebugEnabled = (tl.getInput('RunVerbose', false) || "").toLowerCase() === "true";
-        console.log(serviceName);
+        //console.log(serviceName);
         let SubscriptionId = serviceName;
         let ResourceGroupName: string = convertToNullIfUndefined(tl.getInput('ResourceGroupName', false));
         let StorageAccountName: string = convertToNullIfUndefined(tl.getInput('StorageAccountName', false));
@@ -44,18 +45,51 @@ async function run() {
         let Timeout = tl.getInput("Timeout");
         let RunVerbose = tl.getBoolInput("RunVerbose", false);
 
-        // We will not let user specify which PS version.
-        let targetAzurePs = "";
+        const sasLink = new URL(DxpExportBlobsSasLink);
+        const destinationConnectionString = "DefaultEndpointsProtocol=https;AccountName=bwoffshore;AccountKey=iRjboiZ7W7P/kwgu2oZboH0vWQwPU9E7C9NWHwATm3j87vzlykPaJ4rILigRCLbJRVVI/nLj2KX3ATWni7tYXg==;EndpointSuffix=core.windows.net";
+        const destinationContainer = "deleteme";
 
-        var endpoint = JSON.stringify(endpointObject);
+        const sourceBlobServiceClient = new BlobServiceClient(`${sasLink.protocol}://${sasLink.hostname}?${sasLink.search}`, null);
+        const sourceBlobContainerClient = sourceBlobServiceClient.getContainerClient(sasLink.pathname);
 
-        // Generate the script contents.
-        console.log('GeneratingScript');
-        let contents: string[] = [];
+        const destinationBlobServiceClient = BlobServiceClient.fromConnectionString(destinationConnectionString);
+        const destinationBlobContainerClient = destinationBlobServiceClient.getContainerClient(destinationContainer);
 
-        if (isDebugEnabled) {
-            contents.push("$VerbosePreference = 'continue'");
+        const blobs = sourceBlobContainerClient.listBlobsFlat();
+        for await (const blob of blobs) {
+            const sourceBlobClient = sourceBlobContainerClient.getBlobClient(blob.name);
+
+            const destinationBlobClient = destinationBlobContainerClient.getBlobClient(blob.name);
+            destinationBlobClient.beginCopyFromURL(sourceBlobClient.url);
+            if (RunVerbose) console.log(`Copy ${blob.name}`);
         }
+           
+        // var blobs = sourceBlobContainerClient.GetBlobs();
+        // if (verbose) Console.WriteLine("Loaded all blobs from source");
+        // foreach (var blob in blobs)
+        // {
+        //     var sourceBlobClient = sourceBlobContainerClient.GetBlobClient(blob.Name);
+            
+        //     var destinationBlobClient = destinationblobContainerClient.GetBlobClient(blob.Name);
+        //     destinationBlobClient.StartCopyFromUri(new Uri($"{sasInfo.PathLink}/{blob.Name}{sasInfo.SasToken}"));
+        //     if (verbose) Console.WriteLine($"Copy {blob.Name}");
+        // }
+        
+
+
+
+        // We will not let user specify which PS version.
+        // let targetAzurePs = "";
+
+        // var endpoint = JSON.stringify(endpointObject);
+
+        // // Generate the script contents.
+        // console.log('GeneratingScript');
+        // let contents: string[] = [];
+
+        // if (isDebugEnabled) {
+        //     contents.push("$VerbosePreference = 'continue'");
+        // }
 
 
 
@@ -75,72 +109,72 @@ async function run() {
         // contents.push(`$ErrorActionPreference = '${_vsts_input_errorActionPreference}'`); 
         // contents.push(`${azStorageFilePath} -endpoint '${endpoint}'`);
 
-        // Execute script to do the copy.
-        let yourScriptPath2 = path.join(path.resolve(__dirname), 'ImportDxpBlobsToAzure.ps1');
-        contents.push(`${yourScriptPath2} -DxpExportBlobsSasLink '${DxpExportBlobsSasLink}' -SubscriptionId '${SubscriptionId}' -ResourceGroupName '${ResourceGroupName}' -StorageAccountName '${StorageAccountName}' -StorageAccountContainer '${StorageAccountContainer}' -CleanBeforeCopy ${CleanBeforeCopy} -First ${First} -Timeout ${Timeout}`); 
+        // // Execute script to do the copy.
+        // let yourScriptPath2 = path.join(path.resolve(__dirname), 'ImportDxpBlobsToAzure.ps1');
+        // contents.push(`${yourScriptPath2} -DxpExportBlobsSasLink '${DxpExportBlobsSasLink}' -SubscriptionId '${SubscriptionId}' -ResourceGroupName '${ResourceGroupName}' -StorageAccountName '${StorageAccountName}' -StorageAccountContainer '${StorageAccountContainer}' -CleanBeforeCopy ${CleanBeforeCopy} -First ${First} -Timeout ${Timeout}`); 
 
 
 
-        // Write the script to disk.
-        tl.assertAgent('2.115.0');
-        let tempDirectory = tl.getVariable('agent.tempDirectory');
-        tl.checkPath(tempDirectory, `${tempDirectory} (agent.tempDirectory)`);
-        let filePath = path.join(tempDirectory, uuidV4() + '.ps1');
+        // // Write the script to disk.
+        // tl.assertAgent('2.115.0');
+        // let tempDirectory = tl.getVariable('agent.tempDirectory');
+        // tl.checkPath(tempDirectory, `${tempDirectory} (agent.tempDirectory)`);
+        // let filePath = path.join(tempDirectory, uuidV4() + '.ps1');
 
 
-        await fs.writeFile(
-            filePath,
-            '\ufeff' + contents.join(os.EOL), // Prepend the Unicode BOM character.
-            { encoding: 'utf8' }, // Since UTF8 encoding is specified, node will
-                                        // encode the BOM into its UTF8 binary sequence.
-            function (err) {
-                if (err) throw err;
-                console.log('Saved!');
-            });
+        // await fs.writeFile(
+        //     filePath,
+        //     '\ufeff' + contents.join(os.EOL), // Prepend the Unicode BOM character.
+        //     { encoding: 'utf8' }, // Since UTF8 encoding is specified, node will
+        //                                 // encode the BOM into its UTF8 binary sequence.
+        //     function (err) {
+        //         if (err) throw err;
+        //         console.log('Saved!');
+        //     });
 
-        // Run the script.
-        //
-        // Note, prefer "pwsh" over "powershell". At some point we can remove support for "powershell".
-        //
-        // Note, use "-Command" instead of "-File" to match the Windows implementation. Refer to
-        // comment on Windows implementation for an explanation why "-Command" is preferred.
-        let powershell = tl.tool(tl.which('pwsh') || tl.which('powershell') || tl.which('pwsh', true))
-            .arg('-NoLogo')
-            .arg('-NoProfile')
-            .arg('-NonInteractive')
-            .arg('-ExecutionPolicy')
-            .arg('Unrestricted')
-            .arg('-Command')
-            .arg(`. '${filePath.replace(/'/g, "''")}'`);
+        // // Run the script.
+        // //
+        // // Note, prefer "pwsh" over "powershell". At some point we can remove support for "powershell".
+        // //
+        // // Note, use "-Command" instead of "-File" to match the Windows implementation. Refer to
+        // // comment on Windows implementation for an explanation why "-Command" is preferred.
+        // let powershell = tl.tool(tl.which('pwsh') || tl.which('powershell') || tl.which('pwsh', true))
+        //     .arg('-NoLogo')
+        //     .arg('-NoProfile')
+        //     .arg('-NonInteractive')
+        //     .arg('-ExecutionPolicy')
+        //     .arg('Unrestricted')
+        //     .arg('-Command')
+        //     .arg(`. '${filePath.replace(/'/g, "''")}'`);
 
-        let options = <tr.IExecOptions>{
-            cwd: input_workingDirectory,
-            failOnStdErr: false,
-            errStream: process.stdout, // Direct all output to STDOUT, otherwise the output may appear out
-            outStream: process.stdout, // of order since Node buffers it's own STDOUT but not STDERR.
-            ignoreReturnCode: true
-        };
+        // let options = <tr.IExecOptions>{
+        //     cwd: input_workingDirectory,
+        //     failOnStdErr: false,
+        //     errStream: process.stdout, // Direct all output to STDOUT, otherwise the output may appear out
+        //     outStream: process.stdout, // of order since Node buffers it's own STDOUT but not STDERR.
+        //     ignoreReturnCode: true
+        // };
 
-        // Listen for stderr.
-        let stderrFailure = false;
-        if (_vsts_input_failOnStandardError) {
-            powershell.on('stderr', (data) => {
-                stderrFailure = true;
-            });
-        }
+        // // Listen for stderr.
+        // let stderrFailure = false;
+        // if (_vsts_input_failOnStandardError) {
+        //     powershell.on('stderr', (data) => {
+        //         stderrFailure = true;
+        //     });
+        // }
 
-        // Run bash.
-        let exitCode: number = await powershell.exec(options);
+        // // Run bash.
+        // let exitCode: number = await powershell.exec(options);
 
-        // Fail on exit code.
-        if (exitCode !== 0) {
-            tl.setResult(tl.TaskResult.Failed, tl.loc('JS_ExitCode', exitCode));
-        }
+        // // Fail on exit code.
+        // if (exitCode !== 0) {
+        //     tl.setResult(tl.TaskResult.Failed, tl.loc('JS_ExitCode', exitCode));
+        // }
 
-        // Fail on stderr.
-        if (stderrFailure) {
-            tl.setResult(tl.TaskResult.Failed, tl.loc('JS_Stderr'));
-        }
+        // // Fail on stderr.
+        // if (stderrFailure) {
+        //     tl.setResult(tl.TaskResult.Failed, tl.loc('JS_Stderr'));
+        // }
     }
     catch (err) {
         tl.setResult(tl.TaskResult.Failed, err.message || 'run() failed');
