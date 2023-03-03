@@ -55,12 +55,30 @@ async function run() {
         const destinationBlobContainerClient = destinationBlobServiceClient.getContainerClient(storageAccountContainer);
 
         if (cleanBeforeCopy){
-            const blobs = destinationBlobContainerClient.listBlobsFlat();
+            let i = 0;
+            const blobs = await destinationBlobContainerClient.listBlobsFlat();
+
             for await (const blob of blobs) {
                 const blockBlobClient = destinationBlobContainerClient.getBlockBlobClient(blob.name);
-                blockBlobClient.deleteIfExists();
-                //destinationBlobContainerClient.deleteBlob(blob.name, , ContainerDeleteBlobOptions.IncludeSnapshots);
+                try {
+                    await blockBlobClient.deleteIfExists();
+
+                    console.log(`##vso[task.setprogress value=${i}};]Sample Progress Indicator`);
+                }
+                catch (error) {
+                    if (error instanceof Error) {
+                        console.log(`##[error] ${error.message}`);
+                    } else if (error instanceof String) {
+                        console.log(`##[error] ${error}`);
+                    } else if (error) {
+                        console.log(`##[error] ${JSON.stringify(error)}`);
+                    } else  {
+                        console.log(`##[error] Error while deleting blob`);
+                    }
+                }
+               
                 if (RunVerbose) console.log(`Delete ${blob.name}`);
+                i++;
             }
     
         }
@@ -68,14 +86,49 @@ async function run() {
         // https://YOUR-RESOURCE-NAME.blob.core.windows.net?YOUR-SAS-TOKEN
         const sourceBlobServiceClient = new BlobServiceClient(endpoint, null);
         const sourceBlobContainerClient = sourceBlobServiceClient.getContainerClient(containerName);
+        const maxPageSize = 100;
 
-        const blobs = sourceBlobContainerClient.listBlobsFlat();
-        for await (const blob of blobs) {
-            const blobUrl = `${sasLink.protocol}//${sasLink.hostname}/${containerName}/${blob.name}${sasToken}`;
-            const destinationBlobClient = destinationBlobContainerClient.getBlobClient(blob.name);
-            destinationBlobClient.beginCopyFromURL(blobUrl);
-            if (RunVerbose) console.log(`Copied ${blob.name}`);
+        // some options for filtering list
+        const listOptions = {
+            includeMetadata: false,
+            includeSnapshots: false,
+            includeTags: false,
+            includeVersions: false,
+            prefix: ''
+        };
+        
+        let iterator = sourceBlobContainerClient.listBlobsFlat(listOptions).byPage({ maxPageSize });
+        let entity = await iterator.next();
+
+        while (!entity.done){
+            const response = entity.value;
+            
+            for (const blob of response.segment.blobItems) {
+                const blobUrl = `${sasLink.protocol}//${sasLink.hostname}/${containerName}/${blob.name}${sasToken}`;
+                const destinationBlobClient = destinationBlobContainerClient.getBlobClient(blob.name);
+    
+                try {
+                    const poller = await destinationBlobClient.beginCopyFromURL(blobUrl);
+                    await poller.pollUntilDone();
+                }
+                catch (error) {
+                    if (error instanceof Error) {
+                        console.log(`##[error] ${error.message}`);
+                    } else if (error instanceof String) {
+                        console.log(`##[error] ${error}`);
+                    } else if (error) {
+                        console.log(`##[error] ${JSON.stringify(error)}`);
+                    } else  {
+                        console.log(`##[error] Error while copying blob`);
+                    }
+                }
+    
+                if (RunVerbose) console.log(`Copied ${blob.name}`);
+            }
+
+            entity = await iterator.next();
         }
+
 
         // if (stderrFailure) {
         //     tl.setResult(tl.TaskResult.Failed, tl.loc('JS_Stderr'));
@@ -85,5 +138,6 @@ async function run() {
         tl.setResult(tl.TaskResult.Failed, err.message || 'run() failed');
     }
 }
+
 
 run();

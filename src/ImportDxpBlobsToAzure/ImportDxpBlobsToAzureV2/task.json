@@ -13,7 +13,7 @@
     "version": {
         "Major": 2,
         "Minor": 2,
-        "Patch": 0
+        "Patch": 1
     },
     "groups": [
         {
@@ -111,7 +111,7 @@
     ],
     "instanceNameFormat": "Import blobs to Azure",
     "execution": {
-        "Node10": {
+        "Node16": {
             "target": "ImportDxpBlobsToAzure.js"
         }
     }
