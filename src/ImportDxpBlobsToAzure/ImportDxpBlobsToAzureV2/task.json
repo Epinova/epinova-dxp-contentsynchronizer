@@ -12,8 +12,8 @@
     "author": "Ove Lartelius",
     "version": {
         "Major": 2,
-        "Minor": 2,
-        "Patch": 1
+        "Minor": 3,
+        "Patch": 0
     },
     "groups": [
         {
@@ -22,22 +22,12 @@
             "isExpanded": true
         },
         {
-            "name": "AdvancedSettings",
-            "displayName": "Advanced settings",
-            "isExpanded": false
-        },
-        {
-            "name": "Timeout",
-            "displayName": "Timeout",
-            "isExpanded": false
-        },
-        {
             "name": "ErrorHandlingOptions",
             "displayName": "Error handling options",
             "isExpanded": false
         }
     ],
-    "releaseNotes": "v2.2.0: Run as node. Changed to use StorageAccountConnection.",
+    "releaseNotes": "v2.3.0: Run as node + BlobsService + Batching.",
     "minimumAgentVersion": "2.134.0",
     "inputs": [
         {
@@ -77,13 +67,13 @@
             "groupName": "Settings"
         },
         {
-            "name": "Timeout",
+            "name": "MaxPageSize",
             "type": "int",
-            "label": "Script timeout (in seconds)",
+            "label": "Batch copy size",
             "required": true,
-            "defaultValue": "1800",
-            "helpMarkDown": "The timeout for the script.",
-            "groupName": "Timeout"
+            "defaultValue": "500",
+            "helpMarkDown": "The size of each batch while copy from DXP to Azure storage account.",
+            "groupName": "Settings"
         },
         {
             "name": "RunVerbose",
