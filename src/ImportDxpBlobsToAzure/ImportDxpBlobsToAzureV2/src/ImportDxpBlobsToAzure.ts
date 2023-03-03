@@ -30,6 +30,7 @@ async function run() {
         const storageAccountConnection: string = convertToNullIfUndefined(tl.getInput('StorageAccountConnection', false));
         const storageAccountContainer: string = convertToNullIfUndefined(tl.getInput('StorageAccountContainer', false));
         const cleanBeforeCopy = tl.getBoolInput("CleanBeforeCopy", false);
+        const maxPageSize = +tl.getInput("MaxPageSize", false);
         //let isDebugEnabled = (tl.getInput('RunVerbose', false) || "").toLowerCase() === "true";
         const runVerbose = tl.getBoolInput("RunVerbose", false);
 
@@ -46,7 +47,7 @@ async function run() {
             await DeleteBlobs(storageAccountConnection, storageAccountContainer, runVerbose);
         }
 
-        await CopyBlobs(dxpExportBlobsSasLink, storageAccountConnection, storageAccountContainer, runVerbose);
+        await CopyBlobs(dxpExportBlobsSasLink, storageAccountConnection, storageAccountContainer, runVerbose, maxPageSize);
 
         // const sasLink = new URL(DxpExportBlobsSasLink);
         // console.log("SAS breakdown --------------");
