@@ -12,8 +12,8 @@
     "author": "Ove Lartelius",
     "version": {
         "Major": 2,
-        "Minor": 1,
-        "Patch": 13
+        "Minor": 2,
+        "Patch": 0
     },
     "groups": [
         {
@@ -37,7 +37,7 @@
             "isExpanded": false
         }
     ],
-    "releaseNotes": "v2.1.0: Added 'First' param. \r\n v2.0.6: Created",
+    "releaseNotes": "v2.2.0: Run as node. Changed to use StorageAccountConnection.",
     "minimumAgentVersion": "2.134.0",
     "inputs": [
         {
@@ -50,40 +50,13 @@
             "groupName": "Settings"
         },
         {
-            "name": "ConnectedServiceNameARM",
-            "aliases": [
-                "azureSubscription"
-            ],
-            "type": "connectedService:AzureRM",
-            "label": "Azure Subscription",
-            "defaultValue": "",
-            "required": true,
-            "groupName": "Settings",
-            "helpMarkDown": "Azure Resource Manager subscription to configure before running PowerShell",
-            "properties": {
-                "EndpointFilterRule": "ScopeLevel != AzureMLWorkspace"
-            }
-        },
-        {
-            "name": "ResourceGroupName",
-            "type": "pickList",
-            "label": "Resource group",
-            "defaultValue": "",
-            "required": true,
-            "groupName": "Settings",
-            "properties": {
-                "EditableOptions": "True"
-            },
-            "helpMarkDown": "The Resource group name."
-        },
-        {
-            "name": "StorageAccountName",
+            "name": "StorageAccountConnection",
             "type": "string",
-            "label": "Storage account",
+            "label": "Storage account connection string",
             "defaultValue": "",
-            "required": false,
+            "required": true,
             "groupName": "Settings",
-            "helpMarkDown": "StorageAccount help text"
+            "helpMarkDown": "The connection string to the destination storage account. Ex: DefaultEndpointsProtocol=https;AccountName=mystorage;AccountKey=iRjboiZ3W7P/kwgu1oZboH0vWQwPU9E7C5NWHwATm1j87vzlykPaJ8rILigRCLbJRVVI/nLj2KX3ATWni7tYXg==;EndpointSuffix=core.windows.net"
         },
         {
             "name": "StorageAccountContainer",
@@ -92,7 +65,7 @@
             "defaultValue": "",
             "required": false,
             "groupName": "Settings",
-            "helpMarkDown": "Storage account container where bacpac will be uploaded before restore."
+            "helpMarkDown": "Storage account container where blobs will be copied to."
         },
         {
             "name": "CleanBeforeCopy",
@@ -102,15 +75,6 @@
             "defaultValue": "false",
             "helpMarkDown": "If you want the script to remove all blobs in destination container before we sync the blobs.",
             "groupName": "Settings"
-        },
-        {
-            "name": "First",
-            "type": "int",
-            "label": "Move first X",
-            "required": false,
-            "defaultValue": "0",
-            "helpMarkDown": "The number of blobs that will be copied. 0 = all.",
-            "groupName": "AdvancedSettings"
         },
         {
             "name": "Timeout",
@@ -145,22 +109,7 @@
             "groupName": "ErrorHandlingOptions"
         }
     ],
-    "dataSourceBindings": [
-        {
-            "target": "ResourceGroupName",
-            "endpointId": "$(ConnectedServiceNameARM)",
-            "dataSourceName": "AzureResourceGroupsByExplicitSubscription",
-            "parameters": {
-                "subscriptionId": "{{endpoint.subscriptionId}}"
-            }
-        },
-        {            
-            "target": "StorageAccountName",            
-            "endpointId": "$(ConnectedServiceNameARM)",            
-            "dataSourceName": "AzureStorageServiceNames"        
-        }
-    ],
-    "instanceNameFormat": "Import $(Environment) blobs to Azure",
+    "instanceNameFormat": "Import blobs to Azure",
     "execution": {
         "Node10": {
             "target": "ImportDxpBlobsToAzure.js"

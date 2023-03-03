@@ -2,11 +2,9 @@ import fs = require('fs');
 import path = require('path');
 import os = require('os');
 import tl = require('azure-pipelines-task-lib/task');
-import tr = require('azure-pipelines-task-lib/toolrunner');
+//import tr = require('azure-pipelines-task-lib/toolrunner');
 
-import { AzureRMEndpoint } from 'azure-pipelines-tasks-azure-arm-rest-v2/azure-arm-endpoint';
 import { BlobServiceClient } from '@azure/storage-blob';
-var uuidV4 = require('uuid/v4');
 
 function convertToNullIfUndefined<T>(arg: T): T|null {
     return arg ? arg : null;
@@ -30,180 +28,55 @@ async function run() {
         let _vsts_input_failOnStandardError = convertToNullIfUndefined(tl.getBoolInput('FailOnStandardError', false));
         
         const DxpExportBlobsSasLink = tl.getInput("DxpExportBlobsSasLink");
-
-        let serviceName = tl.getInput('ConnectedServiceNameARM',/*required*/true);
-        let endpointObject= await new AzureRMEndpoint(serviceName).getEndpoint();
-        let input_workingDirectory = "";
-        let isDebugEnabled = (tl.getInput('RunVerbose', false) || "").toLowerCase() === "true";
-        //console.log(serviceName);
-        let SubscriptionId = serviceName;
-        let ResourceGroupName: string = convertToNullIfUndefined(tl.getInput('ResourceGroupName', false));
-        let StorageAccountName: string = convertToNullIfUndefined(tl.getInput('StorageAccountName', false));
-        let StorageAccountContainer: string = convertToNullIfUndefined(tl.getInput('StorageAccountContainer', false));
-        let CleanBeforeCopy = tl.getBoolInput("CleanBeforeCopy", false);
-        let First = tl.getInput("First");
-        let Timeout = tl.getInput("Timeout");
+        const storageAccountConnection: string = convertToNullIfUndefined(tl.getInput('StorageAccountConnection', false));
+        const storageAccountContainer: string = convertToNullIfUndefined(tl.getInput('StorageAccountContainer', false));
+        const cleanBeforeCopy = tl.getBoolInput("CleanBeforeCopy", false);
+        //let isDebugEnabled = (tl.getInput('RunVerbose', false) || "").toLowerCase() === "true";
         let RunVerbose = tl.getBoolInput("RunVerbose", false);
 
-        console.log("Found sasLink:" + DxpExportBlobsSasLink);
+        console.log("Inputs - ImportDxpBlobsToAzure:");
+        console.log("DxpExportBlobsSasLink:      " + DxpExportBlobsSasLink);
+        console.log("StorageAccountConnection:   " + storageAccountConnection);
+        console.log("StorageAccountContainer:    " + storageAccountContainer);
+        console.log("CleanBeforeCopy:            " + cleanBeforeCopy);
+        console.log("RunVerbose:                 " + RunVerbose);
+    
         const sasLink = new URL(DxpExportBlobsSasLink);
-        console.log("sasLink:" + sasLink);
+        console.log("SAS breakdown --------------");
+        console.log("sasLink:                    " + sasLink);
         const sasToken = sasLink.search;
-        console.log("sasToken:" + sasToken);
+        console.log("sasToken:                   " + sasToken);
         const endpoint = `${sasLink.protocol}//${sasLink.hostname}${sasToken}`;
-        console.log("endpoint:" + endpoint);
+        console.log("endpoint:                   " + endpoint);
         const containerName = sasLink.pathname.replace("/", "");
+        console.log("containerName:              " + containerName);
 
-        console.log("containerName:" + containerName);
-        const destinationConnectionString = "DefaultEndpointsProtocol=https;AccountName=bwoffshore;AccountKey=iRjboiZ7W7P/kwgu2oZboH0vWQwPU9E7C9NWHwATm3j87vzlykPaJ4rILigRCLbJRVVI/nLj2KX3ATWni7tYXg==;EndpointSuffix=core.windows.net";
-        const destinationContainer = "deleteme";
+        const destinationBlobServiceClient = BlobServiceClient.fromConnectionString(storageAccountConnection);
+        const destinationBlobContainerClient = destinationBlobServiceClient.getContainerClient(storageAccountContainer);
 
-        console.log("Connect to source");
-        //const sourceBlobServiceClient = new BlobServiceClient(DxpExportBlobsSasLink, null);
+        if (cleanBeforeCopy){
+            const blobs = destinationBlobContainerClient.listBlobsFlat();
+            for await (const blob of blobs) {
+                const blockBlobClient = destinationBlobContainerClient.getBlockBlobClient(blob.name);
+                blockBlobClient.deleteIfExists();
+                //destinationBlobContainerClient.deleteBlob(blob.name, , ContainerDeleteBlobOptions.IncludeSnapshots);
+                if (RunVerbose) console.log(`Delete ${blob.name}`);
+            }
+    
+        }
+
         // https://YOUR-RESOURCE-NAME.blob.core.windows.net?YOUR-SAS-TOKEN
         const sourceBlobServiceClient = new BlobServiceClient(endpoint, null);
-        console.log("Connected to source");
-
-        console.log("Container client source");
         const sourceBlobContainerClient = sourceBlobServiceClient.getContainerClient(containerName);
-        console.log("Container client source connected");
 
-        console.log("Connect to destination");
-        const destinationBlobServiceClient = BlobServiceClient.fromConnectionString(destinationConnectionString);
-        console.log("Connected to destination");
-        console.log("Container client destination");
-        const destinationBlobContainerClient = destinationBlobServiceClient.getContainerClient(destinationContainer);
-        console.log("Container client destination connected");
-
-        console.log("Will list blobs");
         const blobs = sourceBlobContainerClient.listBlobsFlat();
-        console.log("listed blobs");
         for await (const blob of blobs) {
-            console.log("blob:" + blob.name);
-
-            //const sourceBlobClient = sourceBlobContainerClient.getBlobClient(blob.name);
-
             const blobUrl = `${sasLink.protocol}//${sasLink.hostname}/${containerName}/${blob.name}${sasToken}`;
-            console.log("blobUrl:" + blobUrl);
-
-            console.log("Will get destination blob");
             const destinationBlobClient = destinationBlobContainerClient.getBlobClient(blob.name);
-            console.log("Got destination blob");
-            console.log("Will start copy" + blob.name);
             destinationBlobClient.beginCopyFromURL(blobUrl);
-            console.log(blob.name + " copied");
-            //destinationBlobClient.beginCopyFromURL(sourceBlobClient.url);
-            if (RunVerbose) console.log(`Copy ${blob.name}`);
+            if (RunVerbose) console.log(`Copied ${blob.name}`);
         }
-           
-        // var blobs = sourceBlobContainerClient.GetBlobs();
-        // if (verbose) Console.WriteLine("Loaded all blobs from source");
-        // foreach (var blob in blobs)
-        // {
-        //     var sourceBlobClient = sourceBlobContainerClient.GetBlobClient(blob.Name);
-            
-        //     var destinationBlobClient = destinationblobContainerClient.GetBlobClient(blob.Name);
-        //     destinationBlobClient.StartCopyFromUri(new Uri($"{sasInfo.PathLink}/{blob.Name}{sasInfo.SasToken}"));
-        //     if (verbose) Console.WriteLine($"Copy {blob.Name}");
-        // }
-        
 
-
-
-        // We will not let user specify which PS version.
-        // let targetAzurePs = "";
-
-        // var endpoint = JSON.stringify(endpointObject);
-
-        // // Generate the script contents.
-        // console.log('GeneratingScript');
-        // let contents: string[] = [];
-
-        // if (isDebugEnabled) {
-        //     contents.push("$VerbosePreference = 'continue'");
-        // }
-
-
-
-        // Execute script to get SAS token first
-        // let yourScriptPath1 = path.join(path.resolve(__dirname), 'GetSasTokenFromDxp.ps1');
-        // contents.push(`${yourScriptPath1} -ClientKey '${ClientKey}' -ClientSecret '${ClientSecret}' -ProjectId '${ProjectId}' -Environment '${Environment}' -DxpContainer '${DxpContainer}' -Timeout ${Timeout}`); 
-
-        // const makeModuleAvailableScriptPath = path.join(path.resolve(__dirname), 'TryMakingModuleAvailable.ps1');
-        // contents.push(`${makeModuleAvailableScriptPath} -targetVersion '${targetAzurePs}' -platform Linux`);
-
-
-        // let azFilePath = path.join(path.resolve(__dirname), 'InitializeAz.ps1');
-        // contents.push(`$ErrorActionPreference = '${_vsts_input_errorActionPreference}'`); 
-        // contents.push(`${azFilePath} -endpoint '${endpoint}'`);
-
-        // let azStorageFilePath = path.join(path.resolve(__dirname), 'InitializeAzStorage.ps1');
-        // contents.push(`$ErrorActionPreference = '${_vsts_input_errorActionPreference}'`); 
-        // contents.push(`${azStorageFilePath} -endpoint '${endpoint}'`);
-
-        // // Execute script to do the copy.
-        // let yourScriptPath2 = path.join(path.resolve(__dirname), 'ImportDxpBlobsToAzure.ps1');
-        // contents.push(`${yourScriptPath2} -DxpExportBlobsSasLink '${DxpExportBlobsSasLink}' -SubscriptionId '${SubscriptionId}' -ResourceGroupName '${ResourceGroupName}' -StorageAccountName '${StorageAccountName}' -StorageAccountContainer '${StorageAccountContainer}' -CleanBeforeCopy ${CleanBeforeCopy} -First ${First} -Timeout ${Timeout}`); 
-
-
-
-        // // Write the script to disk.
-        // tl.assertAgent('2.115.0');
-        // let tempDirectory = tl.getVariable('agent.tempDirectory');
-        // tl.checkPath(tempDirectory, `${tempDirectory} (agent.tempDirectory)`);
-        // let filePath = path.join(tempDirectory, uuidV4() + '.ps1');
-
-
-        // await fs.writeFile(
-        //     filePath,
-        //     '\ufeff' + contents.join(os.EOL), // Prepend the Unicode BOM character.
-        //     { encoding: 'utf8' }, // Since UTF8 encoding is specified, node will
-        //                                 // encode the BOM into its UTF8 binary sequence.
-        //     function (err) {
-        //         if (err) throw err;
-        //         console.log('Saved!');
-        //     });
-
-        // // Run the script.
-        // //
-        // // Note, prefer "pwsh" over "powershell". At some point we can remove support for "powershell".
-        // //
-        // // Note, use "-Command" instead of "-File" to match the Windows implementation. Refer to
-        // // comment on Windows implementation for an explanation why "-Command" is preferred.
-        // let powershell = tl.tool(tl.which('pwsh') || tl.which('powershell') || tl.which('pwsh', true))
-        //     .arg('-NoLogo')
-        //     .arg('-NoProfile')
-        //     .arg('-NonInteractive')
-        //     .arg('-ExecutionPolicy')
-        //     .arg('Unrestricted')
-        //     .arg('-Command')
-        //     .arg(`. '${filePath.replace(/'/g, "''")}'`);
-
-        // let options = <tr.IExecOptions>{
-        //     cwd: input_workingDirectory,
-        //     failOnStdErr: false,
-        //     errStream: process.stdout, // Direct all output to STDOUT, otherwise the output may appear out
-        //     outStream: process.stdout, // of order since Node buffers it's own STDOUT but not STDERR.
-        //     ignoreReturnCode: true
-        // };
-
-        // // Listen for stderr.
-        // let stderrFailure = false;
-        // if (_vsts_input_failOnStandardError) {
-        //     powershell.on('stderr', (data) => {
-        //         stderrFailure = true;
-        //     });
-        // }
-
-        // // Run bash.
-        // let exitCode: number = await powershell.exec(options);
-
-        // // Fail on exit code.
-        // if (exitCode !== 0) {
-        //     tl.setResult(tl.TaskResult.Failed, tl.loc('JS_ExitCode', exitCode));
-        // }
-
-        // // Fail on stderr.
         // if (stderrFailure) {
         //     tl.setResult(tl.TaskResult.Failed, tl.loc('JS_Stderr'));
         // }
