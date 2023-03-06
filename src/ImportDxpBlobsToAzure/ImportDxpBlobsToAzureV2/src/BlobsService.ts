@@ -93,3 +93,26 @@ export const CopyBlobs = async(sourceSasLink:string, destinationStorageAccountCo
 
     }    
 }
+
+// async function copyBlob(
+//     blobServiceClient, 
+//     sourceBlobContainer, 
+//     sourceBlobName, 
+//     destinationBlobContainer,
+//     destinationBlobName,) {
+
+//     // create container clients
+//     const sourceContainerClient = blobServiceClient.getContainerClient(sourceBlobContainer); 
+//     const destinationContainerClient = blobServiceClient.getContainerClient(destinationBlobContainer);   
+    
+//     // create blob clients
+//     const sourceBlobClient = await sourceContainerClient.getBlobClient(sourceBlobName);
+//     const destinationBlobClient = await destinationContainerClient.getBlobClient(destinationBlobName);
+
+//     // start copy
+//     const copyPoller = await destinationBlobClient.beginCopyFromURL(sourceBlobClient.url);
+//     console.log('start copy from A to B');
+
+//     // wait until done
+//     await copyPoller.pollUntilDone();
+// }
